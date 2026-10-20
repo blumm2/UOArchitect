@@ -4,7 +4,7 @@
     <LangVersion>latest</LangVersion>
     <Nullable>disable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
-    <Version>2.7.1</Version>
+    <Version>2.7.2</Version>
     <Product>UO Architect</Product>
     <!-- Windows projects (WinForms GUI, Ultima) can be built on Linux/macOS too; they run on Windows. -->
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
