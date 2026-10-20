@@ -431,6 +431,9 @@ namespace UOArchitect
 			System.IO.Directory.SetCurrentDirectory( AppContext.BaseDirectory );
 			InstallSeedDesigns();
 
+			// apply the saved UO client directory before anything reads client files
+			bool autoDetect = Config.AutoDetectClientDirectory;
+
 			// design data types travel over the Orb connection
 			OrbServerSDK.OrbSerializer.RegisterAssembly( typeof( DesignItem ).Assembly );
 			OrbServerSDK.OrbClient.OnError += new OrbServerSDK.OrbErrorEvent( OnOrbError );
@@ -580,7 +583,8 @@ namespace UOArchitect
 
 		private void mnuNewDesign_Click(object sender, System.EventArgs e)
 		{
-			new NewDesigner().ShowDialog(this);
+			if(ClientFiles.Check(this))
+				new NewDesigner().ShowDialog(this);
 		}
 
 		private void mnuImportWFItems_Click(object sender, System.EventArgs e)

@@ -8,10 +8,26 @@ namespace Ultima
 		private static Entry5D[] m_Patches;
 		private static Stream m_Stream;
 
-		public static Stream Stream{ get{ return m_Stream; } }
-		public static Entry5D[] Patches{ get{ return m_Patches; } }
+		public static Stream Stream{ get{ EnsureLoaded(); return m_Stream; } }
+		public static Entry5D[] Patches{ get{ EnsureLoaded(); return m_Patches; } }
 
-		static Verdata()
+		// loaded on first use; Client.ReloadFiles resets it
+		private static void EnsureLoaded()
+		{
+			if ( m_Patches == null )
+				Load();
+		}
+
+		internal static void Reset()
+		{
+			if ( m_Stream != null )
+				m_Stream.Close();
+
+			m_Stream = null;
+			m_Patches = null;
+		}
+
+		private static void Load()
 		{
 			string path = Client.GetFilePath( "verdata.mul" );
 

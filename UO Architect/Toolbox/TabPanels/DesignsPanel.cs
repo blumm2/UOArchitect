@@ -322,6 +322,9 @@ namespace UOArchitect
 
 		private void OpenDesignPreview(DesignData design)
 		{
+			if(!ClientFiles.Check(this.ParentForm))
+				return;
+
 			Cursor.Current = Cursors.WaitCursor;
 
 			if(!design.IsLoaded)
@@ -381,6 +384,9 @@ namespace UOArchitect
 
 		private void OpenSelectedDesignInEditor()
 		{
+			if(!ClientFiles.Check(this.ParentForm))
+				return;
+
 			Cursor.Current = Cursors.WaitCursor;
 
 			if(SelectedNode != null)

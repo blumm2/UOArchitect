@@ -10,14 +10,26 @@ namespace Ultima
 	{
 		private static Hue[] m_List;
 
-		public static Hue[] List{ get{ return m_List; } }
+		public static Hue[] List{ get{ EnsureLoaded(); return m_List; } }
 
-		static Hues()
+		// loaded on first use; Client.ReloadFiles resets it
+		private static void EnsureLoaded()
+		{
+			if ( m_List == null )
+				Load();
+		}
+
+		internal static void Reset()
+		{
+			m_List = null;
+		}
+
+		private static void Load()
 		{
 			string path = Client.GetFilePath( "hues.mul" );
 			int index = 0;
 
-			m_List = new Hue[3000];
+			Hue[] list = new Hue[3000];
 
 			if ( path != null )
 			{
@@ -35,13 +47,15 @@ namespace Ultima
 						bin.ReadInt32();
 
 						for ( int j = 0; j < 8; ++j, ++index )
-							m_List[index] = new Hue( index, bin );
+							list[index] = new Hue( index, bin );
 					}
 				}
 			}
 
 			for ( ; index < 3000; ++index )
-				m_List[index] = new Hue( index );
+				list[index] = new Hue( index );
+
+			m_List = list;
 		}
 
 		public static Hue GetHue( int index )
@@ -52,6 +66,8 @@ namespace Ultima
 			}
 
 			index &= 0x3FFF;
+
+			EnsureLoaded();
 
 			if ( index >= 0 && index < 3000 )
 				return m_List[index];

@@ -480,7 +480,7 @@ namespace Ultima
 			ArrayList dirs = Client.Directories;
 
 			if ( dirs.Count == 0 )
-				throw new DirectoryNotFoundException();
+				throw new DirectoryNotFoundException( "The UO client directory is not set and was not found in the registry." );
 
 			for ( int i = 0; i < dirs.Count; ++i )
 			{
@@ -491,6 +491,30 @@ namespace Ultima
 			}
 
 			return null;
+		}
+
+		/// <summary>
+		/// Drops everything loaded from the client files (art, tiledata, hues, verdata, maps),
+		/// so the next use reads them from the current <see cref="Directories" />.
+		/// Call after changing the directories.
+		/// </summary>
+		/// <summary>
+		/// Replaces <see cref="Directories" /> with the client installations found in the registry
+		/// and reloads the files.
+		/// </summary>
+		public static void UseRegistryDirectories()
+		{
+			m_Directories = LoadDirectories();
+			ReloadFiles();
+		}
+
+		public static void ReloadFiles()
+		{
+			Art.Reset();
+			TileData.Reset();
+			Hues.Reset();
+			Verdata.Reset();
+			Map.ResetAll();
 		}
 
 		internal static string GetFilePath( string format, params object[] args )

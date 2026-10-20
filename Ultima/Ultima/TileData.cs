@@ -350,7 +350,7 @@ namespace Ultima
 		/// </summary>
 		public static LandData[] LandTable
 		{
-			get{ return m_LandData; }
+			get{ EnsureLoaded(); return m_LandData; }
 		}
 
 		/// <summary>
@@ -358,12 +358,12 @@ namespace Ultima
 		/// </summary>
 		public static ItemData[] ItemTable
 		{
-			get{ return m_ItemData; }
+			get{ EnsureLoaded(); return m_ItemData; }
 		}
 
 		public static int[] HeightTable
 		{
-			get{ return m_HeightTable; }
+			get{ EnsureLoaded(); return m_HeightTable; }
 		}
 
 		private static byte[] m_StringBuffer = new byte[20];
@@ -383,7 +383,33 @@ namespace Ultima
 		{
 		}
 
-		static TileData()
+		private static readonly object m_Sync = new object();
+
+		// Loaded on first use, not in a static constructor: a failed load (no client directory
+		// yet) must not break the type for the rest of the session. Client.ReloadFiles resets it.
+		private static void EnsureLoaded()
+		{
+			if ( m_ItemData != null )
+				return;
+
+			lock ( m_Sync )
+			{
+				if ( m_ItemData == null )
+					Load();
+			}
+		}
+
+		internal static void Reset()
+		{
+			lock ( m_Sync )
+			{
+				m_ItemData = null;
+				m_LandData = null;
+				m_HeightTable = null;
+			}
+		}
+
+		private static void Load()
 		{
 			string filePath = Client.GetFilePath( "tiledata.mul" );
 
@@ -416,7 +442,7 @@ namespace Ultima
 					}
 
 					// the tables cover every 16-bit item ID; IDs missing in the file stay empty
-					m_ItemData = new ItemData[0x10000];
+					ItemData[] itemData = new ItemData[0x10000];
 					m_HeightTable = new int[0x10000];
 
 					for ( int i = 0; i < itemCount; ++i )
@@ -436,9 +462,11 @@ namespace Ultima
 						int value = bin.ReadByte();
 						int height = bin.ReadByte();
 
-						m_ItemData[i] = new ItemData( ReadNameString( bin ), flags, weight, quality, quantity, value, height, anim );
+						itemData[i] = new ItemData( ReadNameString( bin ), flags, weight, quality, quantity, value, height, anim );
 						m_HeightTable[i] = height;
 					}
+
+					m_ItemData = itemData;
 				}
 			}
 			else

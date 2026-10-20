@@ -11,6 +11,14 @@ namespace Ultima
 		public Entry3D[] Index{ get{ return m_Index; } }
 		public Stream Stream{ get{ return m_Stream; } }
 
+		internal void Close()
+		{
+			if ( m_Stream != null )
+				m_Stream.Close();
+
+			m_Stream = null;
+		}
+
 		public Stream Seek( int index, out int length, out int extra, out bool patched )
 		{
 			if ( index < 0 || index >= m_Index.Length )

@@ -29,6 +29,23 @@ namespace Ultima
 			m_Height = height;
 		}
 
+		internal static void ResetAll()
+		{
+			Map[] maps = new Map[]{ Felucca, Trammel, Ilshenar, Malas, Tokuno };
+
+			foreach ( Map map in maps )
+			{
+				if ( map.m_Tiles != null )
+					map.m_Tiles.Dispose();
+
+				map.m_Tiles = null;
+				map.m_Cache = null;
+				map.m_Cache_NoStatics = null;
+			}
+
+			m_Colors = null;
+		}
+
 		public bool LoadedMatrix
 		{
 			get

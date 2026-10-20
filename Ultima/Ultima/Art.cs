@@ -10,8 +10,28 @@ namespace Ultima
 		// 0x4000 land tiles followed by item art; since High Seas items go up to 0xFFFF
 		private const int Length = 0x14000;
 
-		private static FileIndex m_FileIndex = new FileIndex( "Artidx.mul", "Art.mul", Length, 4 );
-		public static FileIndex FileIndex{ get{ return m_FileIndex; } }
+		// opened on first use from the current client directory; Client.ReloadFiles resets it
+		private static FileIndex m_FileIndex;
+
+		public static FileIndex FileIndex
+		{
+			get
+			{
+				if ( m_FileIndex == null )
+					m_FileIndex = new FileIndex( "Artidx.mul", "Art.mul", Length, 4 );
+
+				return m_FileIndex;
+			}
+		}
+
+		internal static void Reset()
+		{
+			if ( m_FileIndex != null )
+				m_FileIndex.Close();
+
+			m_FileIndex = null;
+			m_Cache = new Bitmap[Length];
+		}
 
 		private static Bitmap[] m_Cache = new Bitmap[Length];
 
@@ -30,7 +50,7 @@ namespace Ultima
 
 			int length, extra;
 			bool patched;
-			Stream stream = m_FileIndex.Seek( index, out length, out extra, out patched );
+			Stream stream = FileIndex.Seek( index, out length, out extra, out patched );
 
 			if ( stream == null )
 				return null;
@@ -47,7 +67,7 @@ namespace Ultima
 
 			int length, extra;
 			bool patched;
-			Stream stream = m_FileIndex.Seek( index, out length, out extra, out patched );
+			Stream stream = FileIndex.Seek( index, out length, out extra, out patched );
 
 			if ( stream == null )
 				return null;

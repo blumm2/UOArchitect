@@ -100,9 +100,14 @@ namespace UOArchitect
 				}
 				else
 				{
+					// back to the registry; clearing the list left auto-detect with no directory at all
 					_autoDetectClientLocation = true;
-					Ultima.Client.Directories.Clear();
+					_clientDirectory = "";
+					Ultima.Client.UseRegistryDirectories();
 				}
+
+				// art/tiledata loaded from the previous directory (or a failed load) must not stick
+				Ultima.Client.ReloadFiles();
 			}
 		}
 

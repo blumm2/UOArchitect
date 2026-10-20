@@ -114,6 +114,7 @@ namespace UOArchitect.Toolbox.TabPanels
 			this.txtClientDirectory.TabIndex = 4;
 			this.txtClientDirectory.Text = "";
 			this.txtClientDirectory.Leave += new System.EventHandler(this.txtClientDirectory_Leave);
+			this.txtClientDirectory.TextChanged += new System.EventHandler(this.txtClientDirectory_TextChanged);
 			// 
 			// chkAutoDetect
 			// 
@@ -229,6 +230,19 @@ namespace UOArchitect.Toolbox.TabPanels
 				Config.AutoDetectClientDirectory = false;
 				txtClientDirectory.Enabled = true;
 			}
+		}
+
+		// applied as soon as the text is an existing folder, so it counts even when the
+		// app is closed without leaving the box
+		private void txtClientDirectory_TextChanged(object sender, System.EventArgs e)
+		{
+			if(!txtClientDirectory.Enabled)
+				return;
+
+			string directory = txtClientDirectory.Text.Trim();
+
+			if(directory != String.Empty && Directory.Exists(directory))
+				Config.ClientDirectory = directory;
 		}
 
 		private void txtClientDirectory_Leave(object sender, System.EventArgs e)
