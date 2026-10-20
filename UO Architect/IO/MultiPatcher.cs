@@ -30,8 +30,7 @@ namespace UOArchitect
 			mDesign = design;
 			mComponents = Components;
 
-			Success = LoadSourceMultiIndex();
-			Success = LoadSourceMultiMul();
+			Success = LoadSourceMultiIndex() && IsClassicMultiFormat() && LoadSourceMultiMul();
 
 			if(Success)
 			{
@@ -118,7 +117,7 @@ namespace UOArchitect
 				data.Y = (short)block.Y;
 				data.Z = (short)block.Z;
 
-				if(mComponents != null && mComponents.Contains((int)data.ItemID))
+				if(mComponents != null && mComponents.Contains(block.ItemID))
 				{
 					data.IsVisible = 0;
 				}
@@ -128,6 +127,22 @@ namespace UOArchitect
 				mItemBlocks.Add(data);
 			}
 
+		}
+
+		// The patcher reads and rewrites multi.mul with 12-byte records. Clients since High Seas
+		// (7.0.9) use 16-byte records; rewriting such a file with 12-byte records would corrupt it.
+		private bool IsClassicMultiFormat()
+		{
+			foreach(FileIndex index in mIndexes)
+			{
+				if(index.Lookup != -1 && index.Length > 0 && index.Length % 12 != 0)
+				{
+					MessageBox.Show("The target multi.mul uses the High Seas format (16-byte records), which the multi patcher does not support. Nothing was changed.", "Unsupported Multi Format");
+					return false;
+				}
+			}
+
+			return true;
 		}
 
 		private bool LoadSourceMultiIndex()

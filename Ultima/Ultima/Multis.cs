@@ -93,7 +93,7 @@ namespace Ultima
 
 					for ( int i = 0; i < tiles.Length; ++i )
 					{
-						Bitmap bmp = Art.GetStatic( tiles[i].ID - 0x4000 );
+						Bitmap bmp = Art.GetStatic( tiles[i].ID );
 
 						if ( bmp == null )
 							continue;
@@ -134,7 +134,7 @@ namespace Ultima
 
 					for ( int i = 0; i < tiles.Length; ++i )
 					{
-						Bitmap bmp = Art.GetStatic( tiles[i].ID - 0x4000 );
+						Bitmap bmp = Art.GetStatic( tiles[i].ID );
 
 						if ( bmp == null )
 							continue;
@@ -213,7 +213,7 @@ namespace Ultima
 				int xOffset = allTiles[i].m_OffsetX + m_Center.X;
 				int yOffset = allTiles[i].m_OffsetY + m_Center.Y;
 
-				tiles[xOffset][yOffset].Add( (short)((allTiles[i].m_ItemID & 0x3FFF) + 0x4000), (sbyte)allTiles[i].m_OffsetZ );
+				tiles[xOffset][yOffset].Add( (ushort)allTiles[i].m_ItemID, (sbyte)allTiles[i].m_OffsetZ );
 			}
 
 			for ( int x = 0; x < m_Width; ++x )

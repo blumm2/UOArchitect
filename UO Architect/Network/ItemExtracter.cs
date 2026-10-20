@@ -217,13 +217,13 @@ namespace UOArchitect
 
 							DesignItem item = new DesignItem();
 
-							item.ItemID = (short)(tile.ID ^ 0x4000);
+							item.ItemID = tile.ID - 0x4000; // statics are stored as ID + 0x4000
 							item.X = x;
 							item.Y = y;
 							item.Z = tile.Z;
 							
 							if(hued)
-								item.Hue = (short)tile.Hue;
+								item.Hue = tile.Hue;
 
 							if(_items.IndexOf(item) == -1)
 								_items.Add(item);

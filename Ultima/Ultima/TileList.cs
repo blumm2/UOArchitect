@@ -21,7 +21,7 @@ namespace Ultima
 			}
 		}
 
-		public void Add( short id, short hue, sbyte z )
+		public void Add( int id, short hue, sbyte z )
 		{
 			if ( (m_Count + 1) > m_Tiles.Length )
 			{
@@ -67,7 +67,7 @@ namespace Ultima
 			}
 		}
 
-		public void Add( short id, sbyte z )
+		public void Add( int id, sbyte z )
 		{
 			if ( (m_Count + 1) > m_Tiles.Length )
 			{

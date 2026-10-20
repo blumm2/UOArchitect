@@ -240,7 +240,7 @@ namespace Ultima
 
 					while ( pCur < pEnd )
 					{
-						lists[pCur->m_X & 0x7][pCur->m_Y & 0x7].Add( (short)((pCur->m_ID & 0x3FFF) + 0x4000), pCur->m_Hue, pCur->m_Z );
+						lists[pCur->m_X & 0x7][pCur->m_Y & 0x7].Add( (ushort)pCur->m_ID + 0x4000, pCur->m_Hue, pCur->m_Z );
 						++pCur;
 					}
 
@@ -299,7 +299,7 @@ namespace Ultima
 	[System.Runtime.InteropServices.StructLayout( System.Runtime.InteropServices.LayoutKind.Sequential, Pack=1 )]
 	public struct HuedTile
 	{
-		internal short m_ID;
+		internal int m_ID; // item ID + 0x4000; IDs go up to 0xFFFF, so it does not fit a short
 		internal short m_Hue;
 		internal sbyte m_Z;
 
@@ -331,14 +331,14 @@ namespace Ultima
 			}
 		}
 
-		public HuedTile( short id, short hue, sbyte z )
+		public HuedTile( int id, short hue, sbyte z )
 		{
 			m_ID = id;
 			m_Hue = hue;
 			m_Z = z;
 		}
 
-		public void Set( short id, short hue, sbyte z )
+		public void Set( int id, short hue, sbyte z )
 		{
 			m_ID = id;
 			m_Hue = hue;
@@ -349,14 +349,15 @@ namespace Ultima
 	[System.Runtime.InteropServices.StructLayout( System.Runtime.InteropServices.LayoutKind.Sequential, Pack=1 )]
 	public struct Tile : IComparable
 	{
-		internal short m_ID;
+		internal short m_ID; // 3-byte layout: land blocks are read straight from the file
 		internal sbyte m_Z;
 
+		// unsigned: land IDs or (in multi lists) item IDs up to 0xFFFF
 		public int ID
 		{
 			get
 			{
-				return m_ID;
+				return (ushort)m_ID;
 			}
 		}
 
@@ -380,15 +381,15 @@ namespace Ultima
 			}
 		}
 
-		public Tile( short id, sbyte z )
+		public Tile( int id, sbyte z )
 		{
-			m_ID = id;
+			m_ID = (short)id;
 			m_Z = z;
 		}
 
-		public void Set( short id, sbyte z )
+		public void Set( int id, sbyte z )
 		{
-			m_ID = id;
+			m_ID = (short)id;
 			m_Z = z;
 		}
 
@@ -407,8 +408,8 @@ namespace Ultima
 			else if ( a.m_Z > m_Z )
 				return -1;
 
-			ItemData ourData = TileData.ItemTable[m_ID & 0x3FFF];
-			ItemData theirData = TileData.ItemTable[a.m_ID & 0x3FFF];
+			ItemData ourData = TileData.ItemTable[(ushort)m_ID];
+			ItemData theirData = TileData.ItemTable[(ushort)a.m_ID];
 
 			if ( ourData.Height > theirData.Height )
 				return 1;

@@ -393,6 +393,13 @@ namespace Ultima
 				{
 					BinaryReader bin = new BinaryReader( fs );
 
+					// High Seas (client 7.0.9+) tiledata has 64-bit flags and 0x10000 items (3 188 736 bytes);
+					// the older one 32-bit flags and 0x4000 items. Only the low 32 flag bits are used here.
+					bool newFormat = fs.Length >= 3188736;
+					int landSize = (0x4000 / 32) * 4 + 0x4000 * (newFormat ? 30 : 26);
+					int itemBlockSize = 4 + 32 * (newFormat ? 41 : 37);
+					int itemCount = Math.Min( (int)((fs.Length - landSize) / itemBlockSize) * 32, 0x10000 );
+
 					m_LandData = new LandData[0x4000];
 
 					for ( int i = 0; i < 0x4000; ++i )
@@ -402,21 +409,22 @@ namespace Ultima
 							bin.ReadInt32(); // header
 						}
 
-						TileFlag flags = (TileFlag)bin.ReadInt32();
+						TileFlag flags = newFormat ? (TileFlag)(int)bin.ReadInt64() : (TileFlag)bin.ReadInt32();
 						short textureID = bin.ReadInt16(); // skip 2 bytes -- textureID
 
 						m_LandData[i] = new LandData( ReadNameString( bin ), flags, textureID );
 					}
 
-					m_ItemData = new ItemData[0x4000];
-					m_HeightTable = new int[0x4000];
+					// the tables cover every 16-bit item ID; IDs missing in the file stay empty
+					m_ItemData = new ItemData[0x10000];
+					m_HeightTable = new int[0x10000];
 
-					for ( int i = 0; i < 0x4000; ++i )
+					for ( int i = 0; i < itemCount; ++i )
 					{
 						if ( (i & 0x1F) == 0 )
 							bin.ReadInt32(); // header
 
-						TileFlag flags = (TileFlag)bin.ReadInt32();
+						TileFlag flags = newFormat ? (TileFlag)(int)bin.ReadInt64() : (TileFlag)bin.ReadInt32();
 						int weight = bin.ReadByte();
 						int quality = bin.ReadByte();
 						bin.ReadInt16();

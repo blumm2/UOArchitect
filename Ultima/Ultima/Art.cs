@@ -7,10 +7,13 @@ namespace Ultima
 {
 	public class Art
 	{
-		private static FileIndex m_FileIndex = new FileIndex( "Artidx.mul", "Art.mul", 0x10000, 4 );
+		// 0x4000 land tiles followed by item art; since High Seas items go up to 0xFFFF
+		private const int Length = 0x14000;
+
+		private static FileIndex m_FileIndex = new FileIndex( "Artidx.mul", "Art.mul", Length, 4 );
 		public static FileIndex FileIndex{ get{ return m_FileIndex; } }
 
-		private static Bitmap[] m_Cache = new Bitmap[0x10000];
+		private static Bitmap[] m_Cache = new Bitmap[Length];
 
 		public static Bitmap[] Cache{ get{ return m_Cache; } }
 
@@ -37,8 +40,7 @@ namespace Ultima
 
 		public static Bitmap GetStatic( int index )
 		{
-			index += 0x4000;
-			index &= 0xFFFF;
+			index = (index & 0xFFFF) + 0x4000;
 
 			if ( m_Cache[index] != null )
 				return m_Cache[index];

@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using UOArchitectInterface;
 
 namespace UOArchitect
@@ -34,6 +35,23 @@ namespace UOArchitect
 		{
 			_filter = filter;
 			_title = title;
+		}
+
+		// Item ID from a text file. IDs go up to 0xFFFF; files exported by older versions
+		// wrote IDs above 0x7FFF as negative 16-bit numbers, those are mapped back.
+		public static int ParseItemID(string text)
+		{
+			int id = int.Parse(text, NumberStyles.Integer, CultureInfo.InvariantCulture);
+
+			if(id < short.MinValue || id > ushort.MaxValue)
+				throw new FormatException("Item ID out of range: " + text);
+
+			return id & 0xFFFF;
+		}
+
+		public static int ParseInt(string text)
+		{
+			return int.Parse(text, NumberStyles.Integer, CultureInfo.InvariantCulture);
 		}
 
 		public string filter

@@ -129,12 +129,12 @@ namespace UOArchitect
 				{
 					DesignItem item = design.Items[i];
 
-					writer.WriteShort(item.ItemID);
+					writer.WriteShort((short)item.ItemID);
 					writer.WriteShort((short)item.X);
 					writer.WriteShort((short)item.Y);
 					writer.WriteShort((short)(item.Z - zoffset));
 					writer.WriteShort(1);
-					writer.WriteShort(item.Hue);
+					writer.WriteShort((short)item.Hue);
 				}
 
 				writer.Close();

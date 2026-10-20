@@ -5,12 +5,13 @@ namespace UOArchitectInterface
 	[Serializable]
 	public class DesignItem
 	{
-		private short _itemID = 0;
+		// item IDs and hues are unsigned 16 bit (art goes up to 0xFFFF); short made IDs above 0x7FFF negative
+		private ushort _itemID = 0;
 		private int _x = 0;
 		private int _y = 0;
 		private int _z = 0;
 		private short _level = 0;
-		private short _hue = 0;
+		private ushort _hue = 0;
 
 		public DesignItem()
 		{
@@ -18,18 +19,19 @@ namespace UOArchitectInterface
 
 		public DesignItem(int itemID, int x, int y, int z, int level, int hue)
 		{
-			_itemID = (short)itemID;
+			_itemID = (ushort)itemID;
 			_x = x;
 			_y = y;
 			_z = z;
 			_level = (short)level;
-			_hue = (short)hue;
+			_hue = (ushort)hue;
 		}	
 
-		public short ItemID
+		// int so the value is never negative; a negative input (old 16-bit data) keeps its bit pattern
+		public int ItemID
 		{
 			get{ return _itemID; }
-			set{ _itemID = value; }
+			set{ _itemID = (ushort)value; }
 		}
 
 		public int X
@@ -56,10 +58,10 @@ namespace UOArchitectInterface
 			set{ _level = value; }
 		}
 
-		public short Hue
+		public int Hue
 		{
 			get{ return _hue; }
-			set{ _hue = value; }
+			set{ _hue = (ushort)value; }
 		}
 	}
 }

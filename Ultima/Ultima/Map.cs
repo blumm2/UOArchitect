@@ -146,7 +146,7 @@ namespace Ultima
 												while ( pStatics < pStaticsEnd )
 												{
 													z = pStatics->m_Z;
-													top = z + pHeight[pStatics->m_ID & 0x3FFF];
+													top = z + pHeight[pStatics->m_ID - 0x4000];
 
 													if ( top > highTop || (z > highZ && top >= highTop) )
 													{
@@ -323,7 +323,7 @@ namespace Ultima
 											while ( pStatics < pStaticsEnd )
 											{
 												z = pStatics->m_Z;
-												top = z + pHeight[pStatics->m_ID & 0x3FFF];
+												top = z + pHeight[pStatics->m_ID - 0x4000];
 
 												if ( top > highTop || (z > highZ && top >= highTop) )
 												{
@@ -367,7 +367,7 @@ namespace Ultima
 
 		private unsafe static void LoadColors()
 		{
-			m_Colors = new short[0x8000];
+			m_Colors = new short[0x14000]; // 0x4000 land + up to 0x10000 items
 
 			string path = Client.GetFilePath( "radarcol.mul" );
 
@@ -377,7 +377,7 @@ namespace Ultima
 			fixed ( short *pColors = m_Colors )
 			{
 				using ( FileStream fs = new FileStream( path, FileMode.Open, FileAccess.Read, FileShare.Read ) )
-					_lread( fs.Handle, pColors, 0x10000 );
+					_lread( fs.Handle, pColors, (int)Math.Min( fs.Length, m_Colors.Length * 2 ) );
 			}
 		}
 	}

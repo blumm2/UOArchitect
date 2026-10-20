@@ -108,7 +108,7 @@ namespace UOArchitect
 
 						for (int i3 = 0; i3 < (int)tiles1.Length; i3++)
 						{
-							Bitmap bitmap1 = Art.GetStatic(tiles1[i3].ID - 16384);
+							Bitmap bitmap1 = Art.GetStatic(tiles1[i3].ID);
 
 							if (bitmap1 != null)
 							{
@@ -153,7 +153,7 @@ namespace UOArchitect
 
 						for (int k4 = 0; k4 < (int)tiles2.Length; k4++)
 						{
-							Bitmap bitmap3 = Art.GetStatic(tiles2[k4].ID - 16384);
+							Bitmap bitmap3 = Art.GetStatic(tiles2[k4].ID);
 
 							if (bitmap3 != null)
 							{
@@ -237,7 +237,7 @@ namespace UOArchitect
 			{
 				int j2 = multiTileEntrys[i2].m_OffsetX + m_Center.X;
 				int k2 = multiTileEntrys[i2].m_OffsetY + m_Center.Y;
-				tileLists[j2][k2].Add((short)((multiTileEntrys[i2].m_ItemID & 16383) + 16384), (sbyte)multiTileEntrys[i2].m_OffsetZ);
+				tileLists[j2][k2].Add((ushort)multiTileEntrys[i2].m_ItemID, (sbyte)multiTileEntrys[i2].m_OffsetZ);
 			}
 
 			for (int i3 = 0; i3 < m_Width; i3++)
@@ -328,7 +328,7 @@ namespace UOArchitect
 			{
 				int j2 = multiTileEntrys[i2].m_OffsetX + m_Center.X;
 				int k2 = multiTileEntrys[i2].m_OffsetY + m_Center.Y;
-				tileLists[j2][k2].Add((short)((multiTileEntrys[i2].m_ItemID & 16383) + 16384), (sbyte)multiTileEntrys[i2].m_OffsetZ);
+				tileLists[j2][k2].Add((ushort)multiTileEntrys[i2].m_ItemID, (sbyte)multiTileEntrys[i2].m_OffsetZ);
 			}
 
 			for (int i3 = 0; i3 < m_Width; i3++)

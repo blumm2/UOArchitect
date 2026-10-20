@@ -60,10 +60,10 @@ namespace UOArchitect
 							{
 								DesignItem item = new DesignItem();
 
-								item.ItemID = Convert.ToInt16(Values[0]);
-								item.X = Convert.ToInt32(Values[2]);
-								item.Y = Convert.ToInt32(Values[3]);
-								item.Z = Convert.ToInt32(Values[4]);
+								item.ItemID = BaseDesignAdapter.ParseItemID(Values[0]);
+								item.X = BaseDesignAdapter.ParseInt(Values[2]);
+								item.Y = BaseDesignAdapter.ParseInt(Values[3]);
+								item.Z = BaseDesignAdapter.ParseInt(Values[4]);
 
 								if(item.ItemID != 1)
 								{

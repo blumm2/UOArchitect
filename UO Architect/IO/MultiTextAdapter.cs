@@ -37,10 +37,10 @@ namespace UOArchitect
 						TextArr = Text.Split(Separator);
 						
 						DesignItem designItem = new DesignItem();
-						designItem.ItemID = short.Parse(TextArr[0]);
-						designItem.X = int.Parse(TextArr[1]);
-						designItem.Y = int.Parse(TextArr[2]);
-						designItem.Z = int.Parse(TextArr[3]);
+						designItem.ItemID = ParseItemID(TextArr[0]);
+						designItem.X = ParseInt(TextArr[1]);
+						designItem.Y = ParseInt(TextArr[2]);
+						designItem.Z = ParseInt(TextArr[3]);
 
 						designItems.Add(designItem);
 					}
