@@ -56,6 +56,39 @@ namespace UOArchitect
 		public UOARToolBox()
 		{
 			InitializeComponent();
+
+			Application.EnterThreadModal += new EventHandler( OnEnterThreadModal );
+			Application.LeaveThreadModal += new EventHandler( OnLeaveThreadModal );
+		}
+
+		// The toolbox floats above the UO client (TopMost). Dialogs, message boxes and file
+		// dialogs are not TopMost and would open hidden underneath it, so the toolbox steps
+		// out of the topmost band while any modal window is open.
+		private int m_ModalDepth;
+
+		private void OnEnterThreadModal( object sender, EventArgs e )
+		{
+			ChangeModalDepth( 1 );
+		}
+
+		private void OnLeaveThreadModal( object sender, EventArgs e )
+		{
+			ChangeModalDepth( -1 );
+		}
+
+		private void ChangeModalDepth( int delta )
+		{
+			// message boxes may come from worker threads (e.g. connection errors)
+			if ( InvokeRequired )
+			{
+				if ( IsHandleCreated && !IsDisposed )
+					BeginInvoke( new Action<int>( ChangeModalDepth ), delta );
+
+				return;
+			}
+
+			m_ModalDepth = Math.Max( 0, m_ModalDepth + delta );
+			TopMost = ( m_ModalDepth == 0 );
 		}
 
 		/// <summary>
