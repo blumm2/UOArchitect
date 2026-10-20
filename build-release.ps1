@@ -3,6 +3,7 @@
 # packages can be built there thanks to EnableWindowsTargeting).
 #
 #   UOArchitect-<v>-win-x64.zip                  GUI, self-contained, no .NET install needed
+#   UOArchitect-<v>-win-x86.zip                  GUI, self-contained, 32-bit Windows
 #   UOArchitect-<v>-win-arm64.zip                GUI, self-contained, Windows on ARM
 #   UOArchitect-<v>-win-x64-framework-dependent.zip  GUI, small, needs .NET 10 Desktop Runtime
 #   UOArchitect-<v>-server-net10.zip             OrbServerSDK + UOArchitectInterface (any OS/CPU) + server script
@@ -52,7 +53,7 @@ Get-ChildItem $out | Remove-Item -Recurse -Force
 $zips = @()
 
 # GUI, self-contained single file per Windows CPU
-foreach ($rid in @("win-x64", "win-arm64")) {
+foreach ($rid in @("win-x64", "win-x86", "win-arm64")) {
 	$dir = Join-Path $out "UOArchitect-$version-$rid"
 	Invoke-DotNet publish $gui -c $Configuration -r $rid --self-contained `
 		-p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true `

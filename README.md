@@ -21,6 +21,7 @@ Do `artifacts/<verze>/` (mimo git) vytvoří balíčky pro GitHub Release a `SHA
 | Balíček | Obsah |
 |---|---|
 | `UOArchitect-<v>-win-x64.zip` | GUI, self-contained (není potřeba instalovat .NET) |
+| `UOArchitect-<v>-win-x86.zip` | GUI, self-contained, 32bitová Windows |
 | `UOArchitect-<v>-win-arm64.zip` | GUI, self-contained, Windows na ARM |
 | `UOArchitect-<v>-win-x64-framework-dependent.zip` | GUI, malý balíček, vyžaduje .NET 10 Desktop Runtime |
 | `UOArchitect-<v>-server-net10.zip` | `OrbServerSDK.dll` + `UOArchitectInterface.dll` (libovolný OS a CPU), `OrbServer.cs`, návod |
