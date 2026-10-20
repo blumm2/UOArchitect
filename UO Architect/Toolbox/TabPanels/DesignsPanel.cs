@@ -22,7 +22,7 @@ namespace UOArchitect
 		private System.Windows.Forms.Button btnBuild;
 		private System.Windows.Forms.GroupBox groupBox1;
 		private UOArchitect.DesignTreeView tvwDesigns;
-		private System.Windows.Forms.ContextMenu contextMenu1;
+		private System.Windows.Forms.ContextMenuStrip contextMenu1;
 		private System.Windows.Forms.Button btnPatch;
 		/// <summary> 
 		/// Required designer variable.
@@ -68,7 +68,7 @@ namespace UOArchitect
 			this.btnPatch = new System.Windows.Forms.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.tvwDesigns = new UOArchitect.DesignTreeView();
-			this.contextMenu1 = new System.Windows.Forms.ContextMenu();
+			this.contextMenu1 = new System.Windows.Forms.ContextMenuStrip();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -199,11 +199,11 @@ namespace UOArchitect
 		public DesignUnselected OnDesignUnselected;
 
 		private MenuActions _currentAction;
-		private MenuItem _mnuExportDesigns;
-		private MenuItem _mnuDeleteDesigns;
-		private MenuItem _mnuBuildDesign;
-		private MenuItem _mnuEditDesign;
-		private MenuItem _mnuPreviewDesign;
+		private ToolStripMenuItem _mnuExportDesigns;
+		private ToolStripMenuItem _mnuDeleteDesigns;
+		private ToolStripMenuItem _mnuBuildDesign;
+		private ToolStripMenuItem _mnuEditDesign;
+		private ToolStripMenuItem _mnuPreviewDesign;
 		#endregion
 
 		#region Properties
@@ -239,11 +239,11 @@ namespace UOArchitect
 			tvwDesigns.OnDoubleClickDesign += new DesignTreeView.DoubleClickDesign(OnDoubleClickDesign);
 			tvwDesigns.OnRightClickNode += new DesignTreeView.RightClickNode(OnRightClickNode);
 
-			_mnuExportDesigns = new MenuItem("Export");
-			_mnuDeleteDesigns = new MenuItem("Delete");
-			_mnuBuildDesign = new MenuItem("Build");
-			_mnuEditDesign = new MenuItem("Edit");
-			_mnuPreviewDesign = new MenuItem("Preview");
+			_mnuExportDesigns = new ToolStripMenuItem("Export");
+			_mnuDeleteDesigns = new ToolStripMenuItem("Delete");
+			_mnuBuildDesign = new ToolStripMenuItem("Build");
+			_mnuEditDesign = new ToolStripMenuItem("Edit");
+			_mnuPreviewDesign = new ToolStripMenuItem("Preview");
 			_mnuExportDesigns.Click += new EventHandler(_mnuExportDesigns_Click);
 			_mnuDeleteDesigns.Click += new EventHandler(_mnuDeleteDesigns_Click);
 			_mnuBuildDesign.Click += new EventHandler(_mnuBuildDesign_Click);
@@ -434,24 +434,24 @@ namespace UOArchitect
 				_mnuDeleteDesigns.Text = "Delete";
 			}
 
-			contextMenu1.MenuItems.Clear();
+			contextMenu1.Items.Clear();
 
 			if(node is DesignNode)
 			{
-				contextMenu1.MenuItems.Add(_mnuBuildDesign);
-				contextMenu1.MenuItems.Add(_mnuPreviewDesign);
-				contextMenu1.MenuItems.Add(new MenuItem("-"));
-				contextMenu1.MenuItems.Add(_mnuEditDesign);
+				contextMenu1.Items.Add(_mnuBuildDesign);
+				contextMenu1.Items.Add(_mnuPreviewDesign);
+				contextMenu1.Items.Add(new ToolStripSeparator());
+				contextMenu1.Items.Add(_mnuEditDesign);
 			}
 
-			contextMenu1.MenuItems.Add(_mnuDeleteDesigns);
+			contextMenu1.Items.Add(_mnuDeleteDesigns);
 
 			if(node is DesignNode)
 			{
-				contextMenu1.MenuItems.Add(new MenuItem("-"));
+				contextMenu1.Items.Add(new ToolStripSeparator());
 			}
 
-			contextMenu1.MenuItems.Add(_mnuExportDesigns);
+			contextMenu1.Items.Add(_mnuExportDesigns);
 			contextMenu1.Show(tvwDesigns, tvwDesigns.MouseCoords);
 		}
 

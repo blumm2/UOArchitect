@@ -1,44 +1,50 @@
-using System;
+﻿using System;
 using System.Collections;
-using OrbServerSDK;
-using System.Runtime.Remoting;
-using System.Runtime.Remoting.Channels;
-using System.Runtime.Remoting.Channels.Tcp;
-using Server.Accounting;
-using Server;
-using Server.Network;
+using System.Net.Sockets;
 using System.Threading;
+using OrbServerSDK;
+using Server.Accounting;
 
 namespace Server.Engines.OrbRemoteServer
 {
+	// Server side of UO Architect. The connection runs on OrbServerHost (TCP, no .NET Remoting);
+	// every handler below is called on an Orb network thread, so world access is moved onto
+	// the game thread with timers and the network thread waits for the result.
 	class OrbServer
 	{
-		private static readonly int SERVER_PORT = 2594;
+		private static readonly int SERVER_PORT = 2595;
 		private static readonly AccessLevel REQUIRED_ACCESS_LEVEL = AccessLevel.GameMaster;
-		private static readonly string SERVER_VERSION = "Beta 2.2";
+		private static readonly string SERVER_VERSION = "";
 		private static readonly string SERVER_NAME = "UO Architect Server";
+		private static readonly TimeSpan LOGIN_TIMEOUT = TimeSpan.FromSeconds(10);
 
-		private static Hashtable m_Registry = new Hashtable(0, new CaseInsensitiveHashCodeProvider(), new CaseInsensitiveComparer());
+		private static Hashtable m_Registry = System.Collections.Specialized.CollectionsUtil.CreateCaseInsensitiveHashtable(0);
 		private static Hashtable m_Clients = new Hashtable();
-
-		private static bool m_IsRunning = false;
 
 		public static bool IsRunning
 		{
-			get{ return m_IsRunning; }
+			get{ return OrbServerHost.IsRunning; }
 		}
 
 		public static void Initialize()
 		{
-		}
-
-		static OrbServer()
-		{
-			StartServer();
+			// UO Architect data types (DesignItem, BuildRequestArgs, ...) may travel over the connection
+			OrbSerializer.RegisterAssembly(typeof(UOArchitectInterface.DesignItem).Assembly);
 
 			OrbConnection.OnLogin += new OrbConnection.LoginEvent(OnLogin);
+			OrbConnection.OnDisconnect += new OrbConnection.DisconnectEvent(OnDisconnect);
 			OrbConnection.OnExecuteCommand += new OrbConnection.ExecuteCommandEvent(OnExecuteCommand);
 			OrbConnection.OnExecuteRequest += new OrbConnection.ExecuteRequestEvent(OnExecuteRequest);
+
+			try
+			{
+				OrbServerHost.Start(SERVER_PORT);
+				Console.WriteLine("{0} {1} is listening on port {2}", SERVER_NAME, SERVER_VERSION, SERVER_PORT);
+			}
+			catch(SocketException e)
+			{
+				Console.WriteLine("{0}: cannot listen on port {1}: {2}", SERVER_NAME, SERVER_PORT, e.Message);
+			}
 		}
 
 		private static void OnExecuteCommand(string alias, OrbClientInfo clientInfo, OrbCommandArgs args)
@@ -65,13 +71,14 @@ namespace Server.Engines.OrbRemoteServer
 
 		private static OrbClientState GetClientState(OrbClientInfo clientInfo)
 		{
-			return (OrbClientState)m_Clients[clientInfo.ClientID];
+			lock(m_Clients)
+				return (OrbClientState)m_Clients[clientInfo.ClientID];
 		}
 
 		private static OrbResponse OnExecuteRequest(string alias, OrbClientInfo clientInfo, OrbRequestArgs args)
 		{
 			OrbClientState client = GetClientState(clientInfo);
-			
+
 			if(client == null)
 				return null;
 
@@ -105,7 +112,7 @@ namespace Server.Engines.OrbRemoteServer
 			OrbRegistryEntry entry = (OrbRegistryEntry)m_Registry[alias];
 			OrbRequest request = null;
 
-			if(entry != null)
+			if(entry != null && entry.IsRequest)
 			{
 				if(CanConnectionAccess(client, entry))
 				{
@@ -128,7 +135,7 @@ namespace Server.Engines.OrbRemoteServer
 			OrbRegistryEntry entry = (OrbRegistryEntry)m_Registry[alias];
 			OrbCommand command = null;
 
-			if(entry != null)
+			if(entry != null && entry.IsCommand)
 			{
 				if(CanConnectionAccess(client, entry))
 				{
@@ -165,60 +172,42 @@ namespace Server.Engines.OrbRemoteServer
 			return authorized;
 		}
 
-		private static void StartServer()
-		{
-			// Run the OrbServer in a worked thread
-			ThreadPool.QueueUserWorkItem(new WaitCallback(OrbServer.Run), null);
-		}
-
 		public static void Register(string alias, Type type, AccessLevel requiredLevel, bool requiresLogin)
 		{
 			if(!type.IsSubclassOf(typeof(OrbRequest)) && !type.IsSubclassOf(typeof(OrbCommand)) )
 			{
-				Console.WriteLine("OrbRemoteServer Error: The type {0} isn't a subclass of the OrbCommand or OrbRequest classes.", type.FullName); 
+				Console.WriteLine("OrbRemoteServer Error: The type {0} isn't a subclass of the OrbCommand or OrbRequest classes.", type.FullName);
 			}
 			else if(m_Registry.ContainsKey(alias))
-			{	
-				Console.WriteLine("OrbRemoteServer Error: The type {0} has been assigned a duplicate alias.", type.FullName); 
+			{
+				Console.WriteLine("OrbRemoteServer Error: The type {0} has been assigned a duplicate alias.", type.FullName);
 			}
 			else
 			{
 				m_Registry.Add(alias, new OrbRegistryEntry(alias, type, requiredLevel, requiresLogin));
 			}
-			
-		}
 
-		//////////////////////////////////////////////////////////////////////////////
-		// main method - this method registers the TCP/IP channel and the OrbConnection Type
-		// for remote instanciation.
-		public static void Run(object o)
-		{
-			Console.WriteLine("\n{0} {1} is listening on port {2}", SERVER_NAME, SERVER_VERSION, SERVER_PORT);
-			// Create Tcp channel using the selected Port number
-			TcpChannel chan = new TcpChannel(SERVER_PORT);
-			ChannelServices.RegisterChannel(chan);	//register channel
-
-			// register the remote object
-			RemotingConfiguration.RegisterWellKnownServiceType(
-				typeof(OrbConnection),
-				"OrbConnection",
-				WellKnownObjectMode.Singleton);
-			
-			while(true)
-			{
-				// Keep sleeping in order to keep this tread alive without hogging cpu cycles
-				Thread.Sleep(30000);
-			}
 		}
 
 		// This function callback validates an account and returns true if it has access
-		// rights to use this tool.
+		// rights to use this tool. Accounts and mobiles belong to the game thread, so the
+		// check runs there and this network thread waits for it.
 		private static LoginCodes OnLogin(OrbClientInfo clientInfo, string password)
+		{
+			LoginSyncTimer timer = new LoginSyncTimer(clientInfo, password);
+			timer.Start();
+
+			if(!timer.Done.WaitOne(LOGIN_TIMEOUT))
+				return LoginCodes.ConnectionFailure;
+
+			return timer.Code;
+		}
+
+		private static LoginCodes ValidateLogin(OrbClientInfo clientInfo, string password)
 		{
 			LoginCodes code = LoginCodes.Success;
 
-			//Console.WriteLine("OnValidateAccount");
-			Account account = Accounts.GetAccount(clientInfo.UserName);
+			IAccount account = Accounts.GetAccount(clientInfo.UserName);
 
 			if(account == null || account.CheckPassword(password) == false)
 			{
@@ -237,22 +226,26 @@ namespace Server.Engines.OrbRemoteServer
 						code = LoginCodes.NotAuthorized;
 					}
 				}
-				
-				Console.WriteLine("{0} connected to the Orb Script Server", account.Username);
 			}
 
 			if(code == LoginCodes.Success)
 			{
-				if(m_Clients.ContainsKey(clientInfo.ClientID))
-					m_Clients.Remove(clientInfo.ClientID);
+				Console.WriteLine("{0} connected to the Orb Script Server", account.Username);
 
-				m_Clients.Add(clientInfo.ClientID, new OrbClientState(clientInfo, account, DateTime.Now));
+				lock(m_Clients)
+					m_Clients[clientInfo.ClientID] = new OrbClientState(clientInfo, account, DateTime.Now);
 			}
 
 			return code;
 		}
 
-		private static bool IsAccessAllowed(Account acct, AccessLevel accessLevel)
+		private static void OnDisconnect(string clientID)
+		{
+			lock(m_Clients)
+				m_Clients.Remove(clientID);
+		}
+
+        private static bool IsAccessAllowed(IAccount acct, AccessLevel accessLevel)
 		{
 			bool AccessAllowed = false;
 
@@ -263,7 +256,7 @@ namespace Server.Engines.OrbRemoteServer
 					AccessAllowed = true;
 				}
 			}
-			
+
 			return AccessAllowed;
 		}
 
@@ -278,12 +271,12 @@ namespace Server.Engines.OrbRemoteServer
 					AccessAllowed = true;
 				}
 			}
-			
+
 			return AccessAllowed;
 		}
 
 		// get logged in char for an account
-		internal static Mobile GetOnlineMobile(Account acct)
+        internal static Mobile GetOnlineMobile(IAccount acct)
 		{
 			if(acct == null)
 				return null;
@@ -338,6 +331,35 @@ namespace Server.Engines.OrbRemoteServer
 			}
 		}
 
+		class LoginSyncTimer : Timer
+		{
+			private OrbClientInfo m_ClientInfo;
+			private string m_Password;
+
+			public readonly ManualResetEvent Done = new ManualResetEvent(false);
+			public LoginCodes Code = LoginCodes.ConnectionFailure;
+
+			public LoginSyncTimer(OrbClientInfo clientInfo, string password) : base(TimeSpan.Zero)
+			{
+				m_ClientInfo = clientInfo;
+				m_Password = password;
+			}
+
+			protected override void OnTick()
+			{
+				try
+				{
+					Code = ValidateLogin(m_ClientInfo, m_Password);
+				}
+				catch(Exception e)
+				{
+					Console.WriteLine("OrbServer login failed: " + e.Message);
+				}
+
+				Done.Set();
+			}
+		}
+
 		class RequestSyncTimer : Timer
 		{
 			private OrbClientState m_Client;
@@ -383,18 +405,19 @@ namespace Server.Engines.OrbRemoteServer
 		}
 	}
 
-	internal class OrbClientState : OrbClientInfo 
+	internal class OrbClientState : OrbClientInfo
 	{
-		private Account m_Account = null;
+        private IAccount m_Account = null;
 		private DateTime m_LoginTime;
 
-		internal OrbClientState(OrbClientInfo clientInfo, Account account, DateTime loginTime) : base(clientInfo.ClientID, clientInfo.UserName)
+        internal OrbClientState(OrbClientInfo clientInfo, IAccount account, DateTime loginTime)
+            : base(clientInfo.ClientID, clientInfo.UserName)
 		{
 			m_Account = account;
 			m_LoginTime = loginTime;
 		}
 
-		internal Account Account
+        internal IAccount Account
 		{
 			get{ return m_Account; }
 		}

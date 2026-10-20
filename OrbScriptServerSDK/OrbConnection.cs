@@ -1,11 +1,9 @@
 using System;
-using System.Runtime.Remoting;
-using System.Runtime.Remoting.Lifetime;
 using System.Threading;
 
 namespace OrbServerSDK
 {
-	public class OrbConnection : MarshalByRefObject
+	public class OrbConnection
 	{
 		public delegate LoginCodes LoginEvent(OrbClientInfo client, string password);
 		public delegate void DisconnectEvent(string clientID);
@@ -20,11 +18,6 @@ namespace OrbServerSDK
 
 		public OrbConnection()
 		{
-		}
-
-		public override object InitializeLifetimeService()
-		{
-			return null;
 		}
 
 		public LoginResult LoginToServer(OrbClientInfo clientInfo, string password)

@@ -1,146 +1,274 @@
 using System;
-using System.Runtime.Remoting;
-using System.Runtime.Remoting.Lifetime;
-using System.Runtime.Remoting.Channels;
-using System.Runtime.Remoting.Channels.Tcp;
-using System.Windows.Forms;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 
 namespace OrbServerSDK
 {
-	[Serializable]
-	public class OrbClient 
+	public delegate void OrbErrorEvent(string message);
+
+	/// <summary>
+	/// Client side of the Orb connection (UO Architect, test utilities).
+	/// One synchronous call at a time, like the former Remoting proxy.
+	/// </summary>
+	public class OrbClient
 	{
-		private static OrbConnection m_Connection = null;
+		private static readonly TimeSpan ConnectTimeout = TimeSpan.FromSeconds(10);
+
+		private static readonly object m_Sync = new object();
+		private static TcpClient m_Client = null;
+		private static NetworkStream m_Stream = null;
 		private static string m_UserName;
-		private static string m_Password;
-		private static string m_ClientID;
+
+		/// <summary>
+		/// Raised when a command or request fails. The SDK has no UI of its own;
+		/// the application decides how to show the message.
+		/// </summary>
+		public static event OrbErrorEvent OnError;
 
 		public static bool IsConnected
 		{
-			get{ return m_Connection != null ? true : false; }
+			get{ return m_Stream != null; }
 		}
 
-		static OrbClient()
+		public static string UserName
 		{
-			// generate a new ID for this client 
-			m_ClientID = Guid.NewGuid().ToString();
-
-			ChannelServices.RegisterChannel( new TcpClientChannel());
-		}
-
-		private static void CreateConnectionObject(string serverIP, int port )
-		{
-			m_Connection = (OrbConnection)Activator.GetObject(typeof(OrbConnection)
-				, string.Format("tcp://{0}:{1}/OrbConnection", serverIP, port.ToString()));
+			get{ return m_UserName; }
 		}
 
 		public static string ResolveDNS(string server)
 		{
-			IPHostEntry hostEntry = Dns.Resolve(server); 
-			IPAddress[] ipAddresses = hostEntry.AddressList; 
-				
-			return ipAddresses[0].ToString();
+			IPAddress[] addresses = Dns.GetHostAddresses(server);
+
+			foreach(IPAddress address in addresses)
+			{
+				if(address.AddressFamily == AddressFamily.InterNetwork)
+					return address.ToString();
+			}
+
+			return addresses[0].ToString();
 		}
 
 		public static void Disconnect()
 		{
-			if(IsConnected)
+			lock(m_Sync)
 			{
-				m_Connection.Disconnect(m_ClientID);
-				m_Connection = null;
+				if(!IsConnected)
+					return;
+
+				try
+				{
+					OrbProtocol.Send(m_Stream, OrbProtocol.BeginFrame(OrbProtocol.Message.Disconnect));
+				}
+				catch(Exception)
+				{
+				}
+
+				Close();
 			}
 		}
 
 		public static LoginResult LoginToServer(string user, string password, string serverName, int port)
 		{
-			m_UserName = user;
-			m_Password = password;
-
-			LoginResult result;
-
-			try
+			lock(m_Sync)
 			{
-				if(!IsConnected)
-				{
-					// resolve the server name to an IP address
-					string serverIP = ResolveDNS(serverName);
+				LoginResult result;
 
-					// create the remote instance of the OrbConnection object
-					CreateConnectionObject(serverIP, port);
+				try
+				{
+					if(IsConnected)
+						Close();
+
+					Open(serverName, port);
+
+					BinaryWriter frame = OrbProtocol.BeginFrame(OrbProtocol.Message.Login);
+					frame.Write(OrbProtocol.Magic);
+					frame.Write(OrbProtocol.Version);
+					frame.Write(user ?? "");
+					frame.Write(password ?? "");
+					OrbProtocol.Send(m_Stream, frame);
+
+					BinaryReader reply = Receive(OrbProtocol.Message.LoginResult);
+					LoginCodes code = (LoginCodes)reply.ReadByte();
+					string message = OrbProtocol.ReadNullable(reply);
+
+					result = new LoginResult(code, message);
+				}
+				catch(Exception e)
+				{
+					result = new LoginResult(LoginCodes.ConnectionFailure, "Connection Failed\n" + e.Message, e);
 				}
 
-				result = m_Connection.LoginToServer(new OrbClientInfo(m_ClientID, m_UserName), m_Password);
-			}
-			catch(Exception e)
-			{
-				result = new LoginResult(LoginCodes.ConnectionFailure, "Connection Failed\n" + e.Message, e);
-			}
+				if(result.Code == LoginCodes.Success)
+					m_UserName = user;
+				else
+					Close();
 
-			if(result.Code != LoginCodes.Success)
-			{
-				m_Connection = null;
+				return result;
 			}
-				
-			return result;
 		}
 
 		public static void SendCommand(string alias, OrbCommandArgs args)
 		{
-			bool success = true;
-			string reason = null;
+			string error;
 
-			if(!IsConnected)
+			lock(m_Sync)
 			{
-				reason = "A connection is required before this command can be sent to the server.";
-				success = false;
-			}
-				
-			try
-			{
-				m_Connection.SendCommand(alias, new OrbClientInfo(m_ClientID, m_UserName), args);
-				success = true;
-			}
-			catch(Exception e)
-			{
-				reason = "Connection to the server was lost.\nException: " + e.Message ;
-				success = false;
+				BinaryWriter frame = BuildCall(OrbProtocol.Message.Command, alias, args, out error);
+
+				if(frame != null)
+				{
+					try
+					{
+						OrbProtocol.Send(m_Stream, frame);
+
+						BinaryReader reply = Receive(OrbProtocol.Message.CommandResult);
+						error = OrbProtocol.ReadNullable(reply);
+					}
+					catch(Exception e)
+					{
+						error = Fail(e);
+					}
+				}
 			}
 
-			if(!success)
-				MessageBox.Show(reason, "Command Failed");
+			if(error != null)
+				RaiseError(error);
 		}
 
 		public static OrbResponse SendRequest(string alias, OrbRequestArgs args)
 		{
-			bool success = true;
-			string reason = null;
+			string error;
 			OrbResponse response = null;
+
+			lock(m_Sync)
+			{
+				BinaryWriter frame = BuildCall(OrbProtocol.Message.Request, alias, args, out error);
+
+				if(frame != null)
+				{
+					try
+					{
+						OrbProtocol.Send(m_Stream, frame);
+
+						// no timeout: a request may wait for the GM to target something in game
+						BinaryReader reply = Receive(OrbProtocol.Message.RequestResult);
+						error = OrbProtocol.ReadNullable(reply);
+
+						if(error == null)
+						{
+							response = OrbSerializer.Read(reply) as OrbResponse;
+							OrbProtocol.EnsureConsumed(reply);
+						}
+					}
+					catch(Exception e)
+					{
+						error = Fail(e);
+					}
+				}
+			}
+
+			if(error != null)
+				RaiseError(error);
+
+			return response;
+		}
+
+		// Encodes the call before anything is sent: an argument that cannot be
+		// serialized is reported without dropping the connection.
+		private static BinaryWriter BuildCall(OrbProtocol.Message message, string alias, object args, out string error)
+		{
+			error = null;
 
 			if(!IsConnected)
 			{
-				reason = "A connection is required before this request can be sent to the server.";
-				success = false;
+				error = "A connection is required before this command can be sent to the server.";
+				return null;
 			}
-				
+
+			BinaryWriter frame = OrbProtocol.BeginFrame(message);
+			frame.Write(alias);
+
 			try
 			{
-				response = m_Connection.SendRequest(alias, new OrbClientInfo(m_ClientID, m_UserName), args);
-				success = true;
+				OrbSerializer.Write(frame, args);
+			}
+			catch(InvalidDataException e)
+			{
+				error = "The command cannot be sent to the server.\n" + e.Message;
+				return null;
+			}
+
+			return frame;
+		}
+
+		private static void Open(string serverName, int port)
+		{
+			TcpClient client = new TcpClient();
+
+			try
+			{
+				if(!client.ConnectAsync(serverName, port).Wait(ConnectTimeout))
+					throw new TimeoutException(string.Format("No answer from {0}:{1}.", serverName, port));
+
+				client.NoDelay = true;
+				m_Client = client;
+				m_Stream = client.GetStream();
+			}
+			catch(AggregateException e)
+			{
+				client.Close();
+				throw e.InnerException;
 			}
 			catch
 			{
-				reason = "Connection to the server was lost.";
-				success = false;
+				client.Close();
+				throw;
 			}
+		}
 
-			if(!success)
-			{
-				MessageBox.Show(reason, "Command Failed");
-			}
+		private static void Close()
+		{
+			if(m_Client != null)
+				m_Client.Close();
 
-			return response;
+			m_Client = null;
+			m_Stream = null;
+		}
+
+		private static BinaryReader Receive(OrbProtocol.Message expected)
+		{
+			OrbProtocol.Message message;
+			BinaryReader reader = OrbProtocol.Receive(m_Stream, out message);
+
+			if(reader == null)
+				throw new EndOfStreamException("The server closed the connection.");
+
+			if(message != expected)
+				throw new InvalidDataException(string.Format("Unexpected reply 0x{0:X2}.", (byte)message));
+
+			return reader;
+		}
+
+		// A broken stream cannot be resynchronized: drop the connection, the user logs in again.
+		private static string Fail(Exception e)
+		{
+			Close();
+
+			if(e is InvalidDataException)
+				return "Communication with the server failed.\n" + e.Message;
+
+			return "Connection to the server was lost.\n" + e.Message;
+		}
+
+		private static void RaiseError(string message)
+		{
+			OrbErrorEvent handler = OnError;
+
+			if(handler != null)
+				handler(message);
+			else
+				Console.Error.WriteLine("Orb: " + message);
 		}
 	}
 }

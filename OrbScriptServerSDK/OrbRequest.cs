@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace OrbServerSDK
 {
-	public abstract class OrbRequest : MarshalByRefObject
+	public abstract class OrbRequest
 	{
 		private OrbResponse m_Response;
 		private ManualResetEvent m_Reset;

@@ -22,22 +22,22 @@ namespace UOArchitect
 		}
 
 		private System.Windows.Forms.PictureBox picPreview;
-		private System.Windows.Forms.MainMenu mainMenu1;
-		private System.Windows.Forms.MenuItem mnuFile;
-		private System.Windows.Forms.MenuItem mnuExit;
-		private System.Windows.Forms.MenuItem mnuFloorView;
-		private System.Windows.Forms.MenuItem mnuFirst;
-		private System.Windows.Forms.MenuItem mnuSecond;
-		private System.Windows.Forms.MenuItem mnuThird;
-		private System.Windows.Forms.MenuItem mnuSavePicture;
-		private System.Windows.Forms.MenuItem menuItem1;
-		private System.Windows.Forms.MenuItem menuItem2;
-		private System.Windows.Forms.MenuItem mnuSaveBmp;
-		private System.Windows.Forms.MenuItem mnuSaveGif;
-		private System.Windows.Forms.MenuItem mnuSaveJpeg;
-		private System.Windows.Forms.MenuItem mnuSavePng;
-		private System.Windows.Forms.MenuItem mnuFoundation;
-		private System.Windows.Forms.MenuItem mnuRoof;
+		private System.Windows.Forms.MenuStrip mainMenu1;
+		private System.Windows.Forms.ToolStripMenuItem mnuFile;
+		private System.Windows.Forms.ToolStripMenuItem mnuExit;
+		private System.Windows.Forms.ToolStripMenuItem mnuFloorView;
+		private System.Windows.Forms.ToolStripMenuItem mnuFirst;
+		private System.Windows.Forms.ToolStripMenuItem mnuSecond;
+		private System.Windows.Forms.ToolStripMenuItem mnuThird;
+		private System.Windows.Forms.ToolStripMenuItem mnuSavePicture;
+		private System.Windows.Forms.ToolStripSeparator menuItem1;
+		private System.Windows.Forms.ToolStripSeparator menuItem2;
+		private System.Windows.Forms.ToolStripMenuItem mnuSaveBmp;
+		private System.Windows.Forms.ToolStripMenuItem mnuSaveGif;
+		private System.Windows.Forms.ToolStripMenuItem mnuSaveJpeg;
+		private System.Windows.Forms.ToolStripMenuItem mnuSavePng;
+		private System.Windows.Forms.ToolStripMenuItem mnuFoundation;
+		private System.Windows.Forms.ToolStripMenuItem mnuRoof;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -75,22 +75,22 @@ namespace UOArchitect
 		{
 			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(DesignPreview));
 			this.picPreview = new System.Windows.Forms.PictureBox();
-			this.mainMenu1 = new System.Windows.Forms.MainMenu();
-			this.mnuFile = new System.Windows.Forms.MenuItem();
-			this.menuItem1 = new System.Windows.Forms.MenuItem();
-			this.mnuSavePicture = new System.Windows.Forms.MenuItem();
-			this.mnuSaveBmp = new System.Windows.Forms.MenuItem();
-			this.mnuSaveGif = new System.Windows.Forms.MenuItem();
-			this.mnuSaveJpeg = new System.Windows.Forms.MenuItem();
-			this.mnuSavePng = new System.Windows.Forms.MenuItem();
-			this.menuItem2 = new System.Windows.Forms.MenuItem();
-			this.mnuExit = new System.Windows.Forms.MenuItem();
-			this.mnuFloorView = new System.Windows.Forms.MenuItem();
-			this.mnuFoundation = new System.Windows.Forms.MenuItem();
-			this.mnuFirst = new System.Windows.Forms.MenuItem();
-			this.mnuSecond = new System.Windows.Forms.MenuItem();
-			this.mnuThird = new System.Windows.Forms.MenuItem();
-			this.mnuRoof = new System.Windows.Forms.MenuItem();
+			this.mainMenu1 = new System.Windows.Forms.MenuStrip();
+			this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuItem1 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuSavePicture = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuSaveBmp = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuSaveGif = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuSaveJpeg = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuSavePng = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuItem2 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuExit = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuFloorView = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuFoundation = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuFirst = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuSecond = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuThird = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuRoof = new System.Windows.Forms.ToolStripMenuItem();
 			this.SuspendLayout();
 			// 
 			// picPreview
@@ -104,14 +104,13 @@ namespace UOArchitect
 			// 
 			// mainMenu1
 			// 
-			this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+			this.mainMenu1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 																					  this.mnuFile,
 																					  this.mnuFloorView});
 			// 
 			// mnuFile
 			// 
-			this.mnuFile.Index = 0;
-			this.mnuFile.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+			this.mnuFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 																					this.menuItem1,
 																					this.mnuSavePicture,
 																					this.menuItem2,
@@ -120,13 +119,10 @@ namespace UOArchitect
 			// 
 			// menuItem1
 			// 
-			this.menuItem1.Index = 0;
-			this.menuItem1.Text = "-";
 			// 
 			// mnuSavePicture
 			// 
-			this.mnuSavePicture.Index = 1;
-			this.mnuSavePicture.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+			this.mnuSavePicture.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 																						   this.mnuSaveBmp,
 																						   this.mnuSaveGif,
 																						   this.mnuSaveJpeg,
@@ -135,43 +131,35 @@ namespace UOArchitect
 			// 
 			// mnuSaveBmp
 			// 
-			this.mnuSaveBmp.Index = 0;
 			this.mnuSaveBmp.Text = "Bitmap (.bmp)";
 			this.mnuSaveBmp.Click += new System.EventHandler(this.mnuSaveBmp_Click);
 			// 
 			// mnuSaveGif
 			// 
-			this.mnuSaveGif.Index = 1;
 			this.mnuSaveGif.Text = "Gif (.gif)";
 			this.mnuSaveGif.Click += new System.EventHandler(this.mnuSaveGif_Click);
 			// 
 			// mnuSaveJpeg
 			// 
-			this.mnuSaveJpeg.Index = 2;
 			this.mnuSaveJpeg.Text = "Jpeg (.jpeg)";
 			this.mnuSaveJpeg.Click += new System.EventHandler(this.mnuSaveJpeg_Click);
 			// 
 			// mnuSavePng
 			// 
-			this.mnuSavePng.Index = 3;
 			this.mnuSavePng.Text = "Png (.png)";
 			this.mnuSavePng.Click += new System.EventHandler(this.mnuSavePng_Click);
 			// 
 			// menuItem2
 			// 
-			this.menuItem2.Index = 2;
-			this.menuItem2.Text = "-";
 			// 
 			// mnuExit
 			// 
-			this.mnuExit.Index = 3;
 			this.mnuExit.Text = "Exit";
 			this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
 			// 
 			// mnuFloorView
 			// 
-			this.mnuFloorView.Index = 1;
-			this.mnuFloorView.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+			this.mnuFloorView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 																						 this.mnuFoundation,
 																						 this.mnuFirst,
 																						 this.mnuSecond,
@@ -181,35 +169,30 @@ namespace UOArchitect
 			// 
 			// mnuFoundation
 			// 
-			this.mnuFoundation.Index = 0;
 			this.mnuFoundation.Text = "Foundation";
 			this.mnuFoundation.Click += new System.EventHandler(this.mnuFoundationl_Click);
 			// 
 			// mnuFirst
 			// 
-			this.mnuFirst.Index = 1;
-			this.mnuFirst.Shortcut = System.Windows.Forms.Shortcut.F1;
+			this.mnuFirst.ShortcutKeys = System.Windows.Forms.Keys.F1;
 			this.mnuFirst.Text = "First";
 			this.mnuFirst.Click += new System.EventHandler(this.mnuFirst_Click);
 			// 
 			// mnuSecond
 			// 
-			this.mnuSecond.Index = 2;
-			this.mnuSecond.Shortcut = System.Windows.Forms.Shortcut.F2;
+			this.mnuSecond.ShortcutKeys = System.Windows.Forms.Keys.F2;
 			this.mnuSecond.Text = "Second";
 			this.mnuSecond.Click += new System.EventHandler(this.mnuSecond_Click);
 			// 
 			// mnuThird
 			// 
-			this.mnuThird.Index = 3;
-			this.mnuThird.Shortcut = System.Windows.Forms.Shortcut.F3;
+			this.mnuThird.ShortcutKeys = System.Windows.Forms.Keys.F3;
 			this.mnuThird.Text = "Third";
 			this.mnuThird.Click += new System.EventHandler(this.mnuThird_Click);
 			// 
 			// mnuRoof
 			// 
-			this.mnuRoof.Index = 4;
-			this.mnuRoof.Shortcut = System.Windows.Forms.Shortcut.F4;
+			this.mnuRoof.ShortcutKeys = System.Windows.Forms.Keys.F4;
 			this.mnuRoof.Text = "Roof";
 			this.mnuRoof.Click += new System.EventHandler(this.mnuRoof_Click);
 			// 
@@ -220,7 +203,7 @@ namespace UOArchitect
 			this.ClientSize = new System.Drawing.Size(592, 425);
 			this.Controls.Add(this.picPreview);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.Menu = this.mainMenu1;
+			LegacyMenu.Attach(this, this.mainMenu1, true);
 			this.Name = "DesignPreview";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Preview";

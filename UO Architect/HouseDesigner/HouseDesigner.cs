@@ -19,23 +19,23 @@ namespace UOArchitect
 		private int m_Level;
 		private int m_X, m_Y, m_Z;
 		private int m_W=1,m_H=1;
-		private System.Windows.Forms.MainMenu mmMain;
-		private System.Windows.Forms.MenuItem miFile;
-		private System.Windows.Forms.MenuItem miSave;
-		private System.Windows.Forms.MenuItem miDesign;
-		private System.Windows.Forms.MenuItem miLevel;
-		private System.Windows.Forms.MenuItem miFirst;
-		private System.Windows.Forms.MenuItem miSecond;
-		private System.Windows.Forms.MenuItem miThird;
-		private System.Windows.Forms.MenuItem miRoof;
+		private System.Windows.Forms.MenuStrip mmMain;
+		private System.Windows.Forms.ToolStripMenuItem miFile;
+		private System.Windows.Forms.ToolStripMenuItem miSave;
+		private System.Windows.Forms.ToolStripMenuItem miDesign;
+		private System.Windows.Forms.ToolStripMenuItem miLevel;
+		private System.Windows.Forms.ToolStripMenuItem miFirst;
+		private System.Windows.Forms.ToolStripMenuItem miSecond;
+		private System.Windows.Forms.ToolStripMenuItem miThird;
+		private System.Windows.Forms.ToolStripMenuItem miRoof;
 		private System.Windows.Forms.SaveFileDialog saveDialog;
-		private System.Windows.Forms.MenuItem miVirtFloor;
+		private System.Windows.Forms.ToolStripMenuItem miVirtFloor;
 		private TileSetEntry m_Cursor;
-		private System.Windows.Forms.MenuItem miSeperator;
-		private System.Windows.Forms.MenuItem miClear;
-		private System.Windows.Forms.MenuItem menuItem1;
-		private System.Windows.Forms.MenuItem miBuild;
-		private System.Windows.Forms.MenuItem miBuildQuick;
+		private System.Windows.Forms.ToolStripSeparator miSeperator;
+		private System.Windows.Forms.ToolStripMenuItem miClear;
+		private System.Windows.Forms.ToolStripSeparator menuItem1;
+		private System.Windows.Forms.ToolStripMenuItem miBuild;
+		private System.Windows.Forms.ToolStripMenuItem miBuildQuick;
 
 		private bool m_DrawVirtualFloor = true;
 
@@ -43,24 +43,24 @@ namespace UOArchitect
 		private int m_ShiftX, m_ShiftY;
 		private int m_ShiftCX, m_ShiftCY;
 		private int m_CameraX, m_CameraY;
-		private System.Windows.Forms.MenuItem miFoundation;
-		private System.Windows.Forms.MenuItem miRenderImage;
-		private System.Windows.Forms.MenuItem miRenderPng;
-		private System.Windows.Forms.MenuItem miRenderJpeg;
-		private System.Windows.Forms.MenuItem miRenderGif;
-		private System.Windows.Forms.MenuItem miRenderBitmap;
-		private System.Windows.Forms.MenuItem menuItem3;
-		private System.Windows.Forms.MenuItem menuItem2;
-		private System.Windows.Forms.MenuItem menuItem4;
-		private System.Windows.Forms.MenuItem menuItem5;
-		private System.Windows.Forms.MenuItem menuItem6;
-		private System.Windows.Forms.MenuItem mnuSaveAs;
+		private System.Windows.Forms.ToolStripMenuItem miFoundation;
+		private System.Windows.Forms.ToolStripMenuItem miRenderImage;
+		private System.Windows.Forms.ToolStripMenuItem miRenderPng;
+		private System.Windows.Forms.ToolStripMenuItem miRenderJpeg;
+		private System.Windows.Forms.ToolStripMenuItem miRenderGif;
+		private System.Windows.Forms.ToolStripMenuItem miRenderBitmap;
+		private System.Windows.Forms.ToolStripSeparator menuItem3;
+		private System.Windows.Forms.ToolStripMenuItem menuItem2;
+		private System.Windows.Forms.ToolStripMenuItem menuItem4;
+		private System.Windows.Forms.ToolStripMenuItem menuItem5;
+		private System.Windows.Forms.ToolStripSeparator menuItem6;
+		private System.Windows.Forms.ToolStripMenuItem mnuSaveAs;
 
 		private bool m_MouseDown = false;
 		private Point m_MousePos;
 		private UOArchitect.ToolBox toolBox2;
-		private System.Windows.Forms.MenuItem miFifth;
-		private System.Windows.Forms.MenuItem miSixth;
+		private System.Windows.Forms.ToolStripMenuItem miFifth;
+		private System.Windows.Forms.ToolStripMenuItem miSixth;
 
 		private int m_buildZ;
 		private bool m_ShiftKeyDown = false;
@@ -928,73 +928,68 @@ namespace UOArchitect
 		private void InitializeComponent()
 		{
 			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(HouseDesigner));
-			this.mmMain = new System.Windows.Forms.MainMenu();
-			this.miFile = new System.Windows.Forms.MenuItem();
-			this.miSave = new System.Windows.Forms.MenuItem();
-			this.mnuSaveAs = new System.Windows.Forms.MenuItem();
-			this.miRenderImage = new System.Windows.Forms.MenuItem();
-			this.miRenderPng = new System.Windows.Forms.MenuItem();
-			this.miRenderJpeg = new System.Windows.Forms.MenuItem();
-			this.miRenderGif = new System.Windows.Forms.MenuItem();
-			this.miRenderBitmap = new System.Windows.Forms.MenuItem();
-			this.menuItem3 = new System.Windows.Forms.MenuItem();
-			this.miDesign = new System.Windows.Forms.MenuItem();
-			this.miLevel = new System.Windows.Forms.MenuItem();
-			this.miFoundation = new System.Windows.Forms.MenuItem();
-			this.miFirst = new System.Windows.Forms.MenuItem();
-			this.miSecond = new System.Windows.Forms.MenuItem();
-			this.miThird = new System.Windows.Forms.MenuItem();
-			this.miRoof = new System.Windows.Forms.MenuItem();
-			this.miFifth = new System.Windows.Forms.MenuItem();
-			this.miSixth = new System.Windows.Forms.MenuItem();
-			this.miVirtFloor = new System.Windows.Forms.MenuItem();
-			this.miSeperator = new System.Windows.Forms.MenuItem();
-			this.miClear = new System.Windows.Forms.MenuItem();
-			this.menuItem1 = new System.Windows.Forms.MenuItem();
-			this.miBuild = new System.Windows.Forms.MenuItem();
-			this.miBuildQuick = new System.Windows.Forms.MenuItem();
-			this.menuItem2 = new System.Windows.Forms.MenuItem();
-			this.menuItem4 = new System.Windows.Forms.MenuItem();
-			this.menuItem5 = new System.Windows.Forms.MenuItem();
-			this.menuItem6 = new System.Windows.Forms.MenuItem();
+			this.mmMain = new System.Windows.Forms.MenuStrip();
+			this.miFile = new System.Windows.Forms.ToolStripMenuItem();
+			this.miSave = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuSaveAs = new System.Windows.Forms.ToolStripMenuItem();
+			this.miRenderImage = new System.Windows.Forms.ToolStripMenuItem();
+			this.miRenderPng = new System.Windows.Forms.ToolStripMenuItem();
+			this.miRenderJpeg = new System.Windows.Forms.ToolStripMenuItem();
+			this.miRenderGif = new System.Windows.Forms.ToolStripMenuItem();
+			this.miRenderBitmap = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuItem3 = new System.Windows.Forms.ToolStripSeparator();
+			this.miDesign = new System.Windows.Forms.ToolStripMenuItem();
+			this.miLevel = new System.Windows.Forms.ToolStripMenuItem();
+			this.miFoundation = new System.Windows.Forms.ToolStripMenuItem();
+			this.miFirst = new System.Windows.Forms.ToolStripMenuItem();
+			this.miSecond = new System.Windows.Forms.ToolStripMenuItem();
+			this.miThird = new System.Windows.Forms.ToolStripMenuItem();
+			this.miRoof = new System.Windows.Forms.ToolStripMenuItem();
+			this.miFifth = new System.Windows.Forms.ToolStripMenuItem();
+			this.miSixth = new System.Windows.Forms.ToolStripMenuItem();
+			this.miVirtFloor = new System.Windows.Forms.ToolStripMenuItem();
+			this.miSeperator = new System.Windows.Forms.ToolStripSeparator();
+			this.miClear = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuItem1 = new System.Windows.Forms.ToolStripSeparator();
+			this.miBuild = new System.Windows.Forms.ToolStripMenuItem();
+			this.miBuildQuick = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuItem4 = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuItem5 = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuItem6 = new System.Windows.Forms.ToolStripSeparator();
 			this.saveDialog = new System.Windows.Forms.SaveFileDialog();
 			this.toolBox2 = new UOArchitect.ToolBox();
 			this.SuspendLayout();
 			// 
 			// mmMain
 			// 
-			this.mmMain.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+			this.mmMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 																				   this.miFile,
 																				   this.miDesign,
 																				   this.menuItem2});
 			// 
 			// miFile
 			// 
-			this.miFile.Index = 0;
-			this.miFile.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+			this.miFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 																				   this.miSave,
 																				   this.mnuSaveAs,
 																				   this.miRenderImage,
 																				   this.menuItem3});
-			this.miFile.MergeType = System.Windows.Forms.MenuMerge.MergeItems;
 			this.miFile.Text = "&File";
 			// 
 			// miSave
 			// 
-			this.miSave.Index = 0;
 			this.miSave.Text = "&Save";
 			this.miSave.Click += new System.EventHandler(this.miSave_Click);
 			// 
 			// mnuSaveAs
 			// 
-			this.mnuSaveAs.Index = 1;
 			this.mnuSaveAs.Text = "Save &As...";
 			this.mnuSaveAs.Click += new System.EventHandler(this.mnuSaveAs_Click);
 			// 
 			// miRenderImage
 			// 
-			this.miRenderImage.Index = 2;
-			this.miRenderImage.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+			this.miRenderImage.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 																						  this.miRenderPng,
 																						  this.miRenderJpeg,
 																						  this.miRenderGif,
@@ -1003,37 +998,30 @@ namespace UOArchitect
 			// 
 			// miRenderPng
 			// 
-			this.miRenderPng.Index = 0;
 			this.miRenderPng.Text = "Png";
 			this.miRenderPng.Click += new System.EventHandler(this.miRenderPng_Click);
 			// 
 			// miRenderJpeg
 			// 
-			this.miRenderJpeg.Index = 1;
 			this.miRenderJpeg.Text = "Jpg";
 			this.miRenderJpeg.Click += new System.EventHandler(this.miRenderJpeg_Click);
 			// 
 			// miRenderGif
 			// 
-			this.miRenderGif.Index = 2;
 			this.miRenderGif.Text = "Gif";
 			this.miRenderGif.Click += new System.EventHandler(this.miRenderGif_Click);
 			// 
 			// miRenderBitmap
 			// 
-			this.miRenderBitmap.Index = 3;
 			this.miRenderBitmap.Text = "Bitmap";
 			this.miRenderBitmap.Click += new System.EventHandler(this.miRenderBitmap_Click);
 			// 
 			// menuItem3
 			// 
-			this.menuItem3.Index = 3;
-			this.menuItem3.Text = "-";
 			// 
 			// miDesign
 			// 
-			this.miDesign.Index = 1;
-			this.miDesign.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+			this.miDesign.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 																					 this.miLevel,
 																					 this.miVirtFloor,
 																					 this.miSeperator,
@@ -1041,14 +1029,12 @@ namespace UOArchitect
 																					 this.menuItem1,
 																					 this.miBuild,
 																					 this.miBuildQuick});
-			this.miDesign.MergeOrder = 2;
 			this.miDesign.Text = "&Design";
-			this.miDesign.Popup += new System.EventHandler(this.miDesign_Popup);
+			this.miDesign.DropDownOpening += new System.EventHandler(this.miDesign_Popup);
 			// 
 			// miLevel
 			// 
-			this.miLevel.Index = 0;
-			this.miLevel.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+			this.miLevel.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 																					this.miFoundation,
 																					this.miFirst,
 																					this.miSecond,
@@ -1057,118 +1043,97 @@ namespace UOArchitect
 																					this.miFifth,
 																					this.miSixth});
 			this.miLevel.Text = "&Level";
-			this.miLevel.Popup += new System.EventHandler(this.miLevel_Popup);
+			this.miLevel.DropDownOpening += new System.EventHandler(this.miLevel_Popup);
 			// 
 			// miFoundation
 			// 
-			this.miFoundation.Index = 0;
 			this.miFoundation.Text = "F&oundation";
 			this.miFoundation.Click += new System.EventHandler(this.miFoundation_Click);
 			// 
 			// miFirst
 			// 
-			this.miFirst.Index = 1;
-			this.miFirst.Shortcut = System.Windows.Forms.Shortcut.F1;
+			this.miFirst.ShortcutKeys = System.Windows.Forms.Keys.F1;
 			this.miFirst.Text = "F&irst";
 			this.miFirst.Click += new System.EventHandler(this.miFirst_Click);
 			// 
 			// miSecond
 			// 
-			this.miSecond.Index = 2;
-			this.miSecond.Shortcut = System.Windows.Forms.Shortcut.F2;
+			this.miSecond.ShortcutKeys = System.Windows.Forms.Keys.F2;
 			this.miSecond.Text = "&Second";
 			this.miSecond.Click += new System.EventHandler(this.miSecond_Click);
 			// 
 			// miThird
 			// 
-			this.miThird.Index = 3;
-			this.miThird.Shortcut = System.Windows.Forms.Shortcut.F3;
+			this.miThird.ShortcutKeys = System.Windows.Forms.Keys.F3;
 			this.miThird.Text = "&Third";
 			this.miThird.Click += new System.EventHandler(this.miThird_Click);
 			// 
 			// miRoof
 			// 
-			this.miRoof.Index = 4;
-			this.miRoof.Shortcut = System.Windows.Forms.Shortcut.F4;
+			this.miRoof.ShortcutKeys = System.Windows.Forms.Keys.F4;
 			this.miRoof.Text = "&Fourth";
 			this.miRoof.Click += new System.EventHandler(this.miRoof_Click);
 			// 
 			// miFifth
 			// 
-			this.miFifth.Index = 5;
-			this.miFifth.Shortcut = System.Windows.Forms.Shortcut.F6;
+			this.miFifth.ShortcutKeys = System.Windows.Forms.Keys.F6;
 			this.miFifth.Text = "Fifth";
 			this.miFifth.Click += new System.EventHandler(this.miFifth_Click);
 			// 
 			// miSixth
 			// 
-			this.miSixth.Index = 6;
-			this.miSixth.Shortcut = System.Windows.Forms.Shortcut.F7;
+			this.miSixth.ShortcutKeys = System.Windows.Forms.Keys.F7;
 			this.miSixth.Text = "Sixth";
 			this.miSixth.Click += new System.EventHandler(this.miSixth_Click);
 			// 
 			// miVirtFloor
 			// 
-			this.miVirtFloor.Index = 1;
-			this.miVirtFloor.Shortcut = System.Windows.Forms.Shortcut.F5;
+			this.miVirtFloor.ShortcutKeys = System.Windows.Forms.Keys.F5;
 			this.miVirtFloor.Text = "&Virtual Floor";
 			this.miVirtFloor.Click += new System.EventHandler(this.miVirtFloor_Click);
 			// 
 			// miSeperator
 			// 
-			this.miSeperator.Index = 2;
-			this.miSeperator.Text = "-";
 			// 
 			// miClear
 			// 
-			this.miClear.Index = 3;
 			this.miClear.Text = "&Clear";
 			this.miClear.Click += new System.EventHandler(this.miClear_Click);
 			// 
 			// menuItem1
 			// 
-			this.menuItem1.Index = 4;
-			this.menuItem1.Text = "-";
 			// 
 			// miBuild
 			// 
-			this.miBuild.Index = 5;
 			this.miBuild.Text = "&Build";
 			this.miBuild.Click += new System.EventHandler(this.miBuild_Click);
 			// 
 			// miBuildQuick
 			// 
-			this.miBuildQuick.Index = 6;
 			this.miBuildQuick.Text = "Build &Quick";
 			this.miBuildQuick.Click += new System.EventHandler(this.miBuildQuick_Click);
 			// 
 			// menuItem2
 			// 
-			this.menuItem2.Index = 2;
-			this.menuItem2.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+			this.menuItem2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 																					  this.menuItem4,
 																					  this.menuItem5,
 																					  this.menuItem6});
-			this.menuItem2.MergeOrder = 2;
 			this.menuItem2.Text = "&Build";
 			this.menuItem2.Visible = false;
 			// 
 			// menuItem4
 			// 
 			this.menuItem4.Enabled = false;
-			this.menuItem4.Index = 0;
 			this.menuItem4.Text = "Build Design";
 			// 
 			// menuItem5
 			// 
 			this.menuItem5.Enabled = false;
-			this.menuItem5.Index = 1;
 			this.menuItem5.Text = "Extract Design";
 			// 
 			// menuItem6
 			// 
-			this.menuItem6.Index = 2;
-			this.menuItem6.Text = "-";
 			// 
 			// saveDialog
 			// 
@@ -1194,7 +1159,7 @@ namespace UOArchitect
 			this.Controls.Add(this.toolBox2);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.KeyPreview = true;
-			this.Menu = this.mmMain;
+			LegacyMenu.Attach(this, this.mmMain, false);
 			this.Name = "HouseDesigner";
 			this.Text = "HouseDesigner";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;

@@ -1,3 +1,37 @@
+# UO Architect 2.6.1 – port na .NET 10
+
+Větev `net10`: projekty převedené z Visual Studia 2003 / .NET 1.1 na SDK-style .NET 10.
+
+## Sestavení
+
+```
+dotnet build UOArchitect.sln -c Release
+```
+
+Výstup: `UO Architect/bin/Release/net10.0-windows/UO Architect.exe`. Při prvním buildu se do výstupu zkopíruje databáze návrhů z `UO Architect/Data/Save` (jen pokud tam ještě žádná není, rebuild tvoje návrhy nepřepíše).
+
+| Projekt | Cíl | Běží na |
+|---|---|---|
+| `OrbScriptServerSDK/OrbServerSDK.csproj` – spojení klient ↔ server | `net10.0` | Windows, Linux, ARM64 |
+| `UO Architect/UOArchitectInterfaces/UOArchitectInterface.csproj` – sdílené datové typy | `net10.0` | Windows, Linux, ARM64 |
+| `Ultima/Ultima/Ultima.csproj` – čtení dat klienta UO (System.Drawing, Win32) | `net10.0-windows` | Windows |
+| `UO Architect/UO Architect.csproj` – GUI (WinForms) | `net10.0-windows` | Windows |
+
+Sestavit jde vše i na Linuxu/macOS (`EnableWindowsTargeting`), GUI ale běží jen na Windows. Serverová část (`OrbServerSDK`, `UOArchitectInterface`) je čistý .NET 10 a běží se serverem kdekoli.
+
+## Co se změnilo proti 2.6.1
+
+- **Spojení bez .NET Remoting.** Remoting v .NET 10 neexistuje. `OrbServerSDK` má vlastní TCP protokol (`OrbProtocol`, `OrbServerHost`, `OrbClient`) a serializaci (`OrbSerializer`) místo `BinaryFormatter`. API pro skripty (`OrbConnection`, `OrbRequest`, `OrbCommand`, `OrbClient`) zůstává.
+  - Server místo `RemotingConfiguration.RegisterWellKnownServiceType(...)` volá `OrbServerHost.Start(port)` a obě strany registrují sdílené typy: `OrbSerializer.RegisterAssembly(typeof(UOArchitectInterface.DesignItem).Assembly)`.
+  - Přenášet jdou jen `[Serializable]` typy z registrovaných assembly; server tedy nevytvoří libovolný typ, který mu klient pošle. Velikost zprávy je omezená (16 MB), počty prvků se kontrolují proti délce zprávy.
+  - Identita klienta je svázaná s TCP spojením po přihlášení (`ClientID` generuje server). Před přihlášením server nic jiného nepřijme, po 3 neúspěšných pokusech spojení zavře.
+  - Klient a server musí mít stejnou verzi protokolu (`OrbProtocol.Version`); jinak přihlášení skončí srozumitelnou chybou.
+- **Menu:** `MainMenu`/`MenuItem`/`ContextMenu` jsou v .NET 10 jen nefunkční stuby, formuláře používají `MenuStrip`/`ToolStripMenuItem`/`ContextMenuStrip` (`Controls/LegacyMenu.cs`).
+- Z repa zmizely `bin/`, `obj/`, předkompilované DLL/EXE, zipy releasů a soubory Visual SourceSafe.
+- Ukázkový klient `OrbScriptServerSDK/UOAR Server sample client` a skripty v `UO Architect/RunUO Scripts` (RunUO 1.0) nejsou převedené – jen pro referenci. Výjimka je `OrbScriptServerSDK/Orb UOAR Server Script/OrbServer.cs`: převedený na `OrbServerHost` pro ServUO/RunUO 2.0 (`IAccount`). Kompletní skripty pro ServUO na .NET 10 jsou v RiftwarSagaServUO (`Scripts/Custom/OrbRemoteServer`).
+
+---
+
 UO Architect Client 2.6.1 (New)
 Programmed & Created by Xandor
 Gui & Support by Khaybel

@@ -19,35 +19,35 @@ namespace UOArchitect
 		private System.Windows.Forms.TabPage tabExtract;
 		private System.Windows.Forms.TabPage tabDesigns;
 		private UOArchitect.DesignsPanel designsPanel1;
-		private System.Windows.Forms.MainMenu mainMenu1;
-		private System.Windows.Forms.MenuItem menuItem1;
-		private System.Windows.Forms.MenuItem mnuConnect;
-		private System.Windows.Forms.MenuItem mnuNewDesign;
-		private System.Windows.Forms.MenuItem menuItem6;
-		private System.Windows.Forms.MenuItem menuItem7;
-		private System.Windows.Forms.MenuItem mnuExport;
-		private System.Windows.Forms.MenuItem menuItem9;
-		private System.Windows.Forms.MenuItem mnuExit;
-		private System.Windows.Forms.MenuItem ImportUOARDesign;
-		private System.Windows.Forms.MenuItem mnuImportMultiText;
-		private System.Windows.Forms.MenuItem mnuExportUOARDesign;
-		private System.Windows.Forms.MenuItem mnuExportMultiText;
-		private System.Windows.Forms.MenuItem menuItem2;
-		private System.Windows.Forms.MenuItem menuItem10;
+		private System.Windows.Forms.MenuStrip mainMenu1;
+		private System.Windows.Forms.ToolStripMenuItem menuItem1;
+		private System.Windows.Forms.ToolStripMenuItem mnuConnect;
+		private System.Windows.Forms.ToolStripMenuItem mnuNewDesign;
+		private System.Windows.Forms.ToolStripSeparator menuItem6;
+		private System.Windows.Forms.ToolStripMenuItem menuItem7;
+		private System.Windows.Forms.ToolStripMenuItem mnuExport;
+		private System.Windows.Forms.ToolStripSeparator menuItem9;
+		private System.Windows.Forms.ToolStripMenuItem mnuExit;
+		private System.Windows.Forms.ToolStripMenuItem ImportUOARDesign;
+		private System.Windows.Forms.ToolStripMenuItem mnuImportMultiText;
+		private System.Windows.Forms.ToolStripMenuItem mnuExportUOARDesign;
+		private System.Windows.Forms.ToolStripMenuItem mnuExportMultiText;
+		private System.Windows.Forms.ToolStripMenuItem menuItem2;
+		private System.Windows.Forms.ToolStripSeparator menuItem10;
 		private UOArchitect.ExtractPanel extractPanel1;
 		private UOArchitect.Toolbox.TabPanels.MovePanel movePanel1;
 		private System.Windows.Forms.TabPage tabOptions;
 		private UOArchitect.Toolbox.TabPanels.OptionsTab optionsTab1;
 		private System.Windows.Forms.TabPage tabAbout;
 		private UOArchitect.Toolbox.AboutTab aboutTab1;
-		private System.Windows.Forms.MenuItem mnuImportWFItems;
-		private System.Windows.Forms.MenuItem mnuExportMultiMul;
-		private System.Windows.Forms.MenuItem mnuImportMultiCache;
-		private System.Windows.Forms.MenuItem mnuOrbsydia;
-		private System.Windows.Forms.MenuItem mnuUOARHome;
-		private System.Windows.Forms.MenuItem menuItem3;
-		private System.Windows.Forms.MenuItem mnuUOARForum;
-		private System.Windows.Forms.MenuItem mnuUOARBuildings;
+		private System.Windows.Forms.ToolStripMenuItem mnuImportWFItems;
+		private System.Windows.Forms.ToolStripMenuItem mnuExportMultiMul;
+		private System.Windows.Forms.ToolStripMenuItem mnuImportMultiCache;
+		private System.Windows.Forms.ToolStripMenuItem mnuOrbsydia;
+		private System.Windows.Forms.ToolStripMenuItem mnuUOARHome;
+		private System.Windows.Forms.ToolStripSeparator menuItem3;
+		private System.Windows.Forms.ToolStripMenuItem mnuUOARForum;
+		private System.Windows.Forms.ToolStripMenuItem mnuUOARBuildings;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -92,29 +92,29 @@ namespace UOArchitect
 			this.optionsTab1 = new UOArchitect.Toolbox.TabPanels.OptionsTab();
 			this.tabAbout = new System.Windows.Forms.TabPage();
 			this.aboutTab1 = new UOArchitect.Toolbox.AboutTab();
-			this.mainMenu1 = new System.Windows.Forms.MainMenu();
-			this.menuItem1 = new System.Windows.Forms.MenuItem();
-			this.mnuNewDesign = new System.Windows.Forms.MenuItem();
-			this.menuItem6 = new System.Windows.Forms.MenuItem();
-			this.menuItem7 = new System.Windows.Forms.MenuItem();
-			this.ImportUOARDesign = new System.Windows.Forms.MenuItem();
-			this.mnuImportMultiText = new System.Windows.Forms.MenuItem();
-			this.mnuImportWFItems = new System.Windows.Forms.MenuItem();
-			this.mnuImportMultiCache = new System.Windows.Forms.MenuItem();
-			this.mnuExport = new System.Windows.Forms.MenuItem();
-			this.mnuExportUOARDesign = new System.Windows.Forms.MenuItem();
-			this.mnuExportMultiText = new System.Windows.Forms.MenuItem();
-			this.mnuExportMultiMul = new System.Windows.Forms.MenuItem();
-			this.menuItem9 = new System.Windows.Forms.MenuItem();
-			this.mnuExit = new System.Windows.Forms.MenuItem();
-			this.mnuConnect = new System.Windows.Forms.MenuItem();
-			this.menuItem2 = new System.Windows.Forms.MenuItem();
-			this.menuItem10 = new System.Windows.Forms.MenuItem();
-			this.mnuOrbsydia = new System.Windows.Forms.MenuItem();
-			this.mnuUOARHome = new System.Windows.Forms.MenuItem();
-			this.menuItem3 = new System.Windows.Forms.MenuItem();
-			this.mnuUOARForum = new System.Windows.Forms.MenuItem();
-			this.mnuUOARBuildings = new System.Windows.Forms.MenuItem();
+			this.mainMenu1 = new System.Windows.Forms.MenuStrip();
+			this.menuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuNewDesign = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuItem6 = new System.Windows.Forms.ToolStripSeparator();
+			this.menuItem7 = new System.Windows.Forms.ToolStripMenuItem();
+			this.ImportUOARDesign = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuImportMultiText = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuImportWFItems = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuImportMultiCache = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuExport = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuExportUOARDesign = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuExportMultiText = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuExportMultiMul = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuItem9 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuExit = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuConnect = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuItem10 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuOrbsydia = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuUOARHome = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuItem3 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuUOARForum = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuUOARBuildings = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabControl1.SuspendLayout();
 			this.tabDesigns.SuspendLayout();
 			this.tabMove.SuspendLayout();
@@ -221,15 +221,14 @@ namespace UOArchitect
 			// 
 			// mainMenu1
 			// 
-			this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+			this.mainMenu1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 																					  this.menuItem1,
 																					  this.mnuConnect,
 																					  this.menuItem2});
 			// 
 			// menuItem1
 			// 
-			this.menuItem1.Index = 0;
-			this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+			this.menuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 																					  this.mnuNewDesign,
 																					  this.menuItem6,
 																					  this.menuItem7,
@@ -240,19 +239,15 @@ namespace UOArchitect
 			// 
 			// mnuNewDesign
 			// 
-			this.mnuNewDesign.Index = 0;
 			this.mnuNewDesign.Text = "&New Design";
 			this.mnuNewDesign.Click += new System.EventHandler(this.mnuNewDesign_Click);
 			// 
 			// menuItem6
 			// 
-			this.menuItem6.Index = 1;
-			this.menuItem6.Text = "-";
 			// 
 			// menuItem7
 			// 
-			this.menuItem7.Index = 2;
-			this.menuItem7.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+			this.menuItem7.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 																					  this.ImportUOARDesign,
 																					  this.mnuImportMultiText,
 																					  this.mnuImportWFItems,
@@ -261,32 +256,27 @@ namespace UOArchitect
 			// 
 			// ImportUOARDesign
 			// 
-			this.ImportUOARDesign.Index = 0;
 			this.ImportUOARDesign.Text = "UO Architect Design (.uoa)";
 			this.ImportUOARDesign.Click += new System.EventHandler(this.ImportUOARDesign_Click);
 			// 
 			// mnuImportMultiText
 			// 
-			this.mnuImportMultiText.Index = 1;
 			this.mnuImportMultiText.Text = "Multi Text (.txt)";
 			this.mnuImportMultiText.Click += new System.EventHandler(this.mnuImportMultiText_Click);
 			// 
 			// mnuImportWFItems
 			// 
-			this.mnuImportWFItems.Index = 2;
 			this.mnuImportWFItems.Text = "World Forge Items (.xml)";
 			this.mnuImportWFItems.Click += new System.EventHandler(this.mnuImportWFItems_Click);
 			// 
 			// mnuImportMultiCache
 			// 
-			this.mnuImportMultiCache.Index = 3;
 			this.mnuImportMultiCache.Text = "UO Client MultiCache (.dat)";
 			this.mnuImportMultiCache.Click += new System.EventHandler(this.mnuImportMultiCache_Click);
 			// 
 			// mnuExport
 			// 
-			this.mnuExport.Index = 3;
-			this.mnuExport.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+			this.mnuExport.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 																					  this.mnuExportUOARDesign,
 																					  this.mnuExportMultiText,
 																					  this.mnuExportMultiMul});
@@ -294,43 +284,35 @@ namespace UOArchitect
 			// 
 			// mnuExportUOARDesign
 			// 
-			this.mnuExportUOARDesign.Index = 0;
 			this.mnuExportUOARDesign.Text = "UO Architect Design (.uoa)";
 			this.mnuExportUOARDesign.Click += new System.EventHandler(this.mnuExportUOARDesign_Click);
 			// 
 			// mnuExportMultiText
 			// 
-			this.mnuExportMultiText.Index = 1;
 			this.mnuExportMultiText.Text = "Multi Text (.txt)";
 			this.mnuExportMultiText.Click += new System.EventHandler(this.mnuExportMultiText_Click);
 			// 
 			// mnuExportMultiMul
 			// 
-			this.mnuExportMultiMul.Index = 2;
 			this.mnuExportMultiMul.Text = "Multi Data (.mul)";
 			this.mnuExportMultiMul.Click += new System.EventHandler(this.mnuExportMultiMul_Click);
 			// 
 			// menuItem9
 			// 
-			this.menuItem9.Index = 4;
-			this.menuItem9.Text = "-";
 			// 
 			// mnuExit
 			// 
-			this.mnuExit.Index = 5;
 			this.mnuExit.Text = "E&xit";
 			this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
 			// 
 			// mnuConnect
 			// 
-			this.mnuConnect.Index = 1;
 			this.mnuConnect.Text = "&Connect";
 			this.mnuConnect.Click += new System.EventHandler(this.mnuConnect_Click);
 			// 
 			// menuItem2
 			// 
-			this.menuItem2.Index = 2;
-			this.menuItem2.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+			this.menuItem2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 																					  this.menuItem10,
 																					  this.mnuOrbsydia,
 																					  this.mnuUOARHome,
@@ -341,35 +323,27 @@ namespace UOArchitect
 			// 
 			// menuItem10
 			// 
-			this.menuItem10.Index = 0;
-			this.menuItem10.Text = "-";
 			// 
 			// mnuOrbsydia
 			// 
-			this.mnuOrbsydia.Index = 1;
 			this.mnuOrbsydia.Text = "&Orbsydia.com";
 			this.mnuOrbsydia.Click += new System.EventHandler(this.mnuOrbsydia_Click);
 			// 
 			// mnuUOARHome
 			// 
-			this.mnuUOARHome.Index = 2;
 			this.mnuUOARHome.Text = "UOAR Home";
 			this.mnuUOARHome.Click += new System.EventHandler(this.mnuUOARHome_Click);
 			// 
 			// menuItem3
 			// 
-			this.menuItem3.Index = 3;
-			this.menuItem3.Text = "-";
 			// 
 			// mnuUOARForum
 			// 
-			this.mnuUOARForum.Index = 4;
 			this.mnuUOARForum.Text = "UOAR Forum";
 			this.mnuUOARForum.Click += new System.EventHandler(this.mnuUOARForum_Click);
 			// 
 			// mnuUOARBuildings
 			// 
-			this.mnuUOARBuildings.Index = 5;
 			this.mnuUOARBuildings.Text = "UOAR Buildings";
 			this.mnuUOARBuildings.Click += new System.EventHandler(this.mnuUOARBuildings_Click);
 			// 
@@ -381,7 +355,7 @@ namespace UOArchitect
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
-			this.Menu = this.mainMenu1;
+			LegacyMenu.Attach(this, this.mainMenu1, true);
 			this.Name = "UOARToolBox";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "UO Architect 2.6";
@@ -420,7 +394,16 @@ namespace UOArchitect
 		[STAThread]
 		public static void Main( string[] args )
 		{
+			// design data types travel over the Orb connection
+			OrbServerSDK.OrbSerializer.RegisterAssembly( typeof( DesignItem ).Assembly );
+			OrbServerSDK.OrbClient.OnError += new OrbServerSDK.OrbErrorEvent( OnOrbError );
+
 			Application.Run( new UOARToolBox() );
+		}
+
+		private static void OnOrbError( string message )
+		{
+			MessageBox.Show( message, "Command Failed" );
 		}
 
 		private void OnDesignSelected()

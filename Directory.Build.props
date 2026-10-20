@@ -1,0 +1,13 @@
+<Project>
+  <!-- Shared settings for all UO Architect projects (.NET 10). -->
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Version>2.6.1</Version>
+    <Product>UO Architect</Product>
+    <!-- Windows projects (WinForms GUI, Ultima) can be built on Linux/macOS too; they run on Windows. -->
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+  </PropertyGroup>
+</Project>
