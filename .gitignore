@@ -1,0 +1,14 @@
+# Build output
+bin/
+obj/
+*.user
+*.suo
+.vs/
+*.pdb
+
+# Old binaries / Visual SourceSafe leftovers
+*.dll
+*.exe
+*.scc
+*.vspscc
+*.vssscc
