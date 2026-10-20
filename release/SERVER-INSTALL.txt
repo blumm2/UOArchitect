@@ -1,0 +1,36 @@
+UO Architect – serverová část pro ServUO na .NET 10
+====================================================
+
+Obsah
+-----
+OrbServerSDK.dll          spojení s UO Architectem (TCP, bez .NET Remoting)
+UOArchitectInterface.dll  datové typy sdílené s klientem
+OrbServer.cs              serverový skript (port 2595, přístup od GameMaster výš)
+
+Obě DLL jsou čistý .NET 10 (net10.0): stejné soubory pro Windows, Linux, x64 i ARM64.
+
+Instalace
+---------
+1. DLL dej do kořene serveru (vedle ServUO.dll) a v Scripts.csproj na ně přidej reference:
+
+     <ItemGroup>
+       <Reference Include="OrbServerSDK"><HintPath>..\OrbServerSDK.dll</HintPath></Reference>
+       <Reference Include="UOArchitectInterface"><HintPath>..\UOArchitectInterface.dll</HintPath></Reference>
+     </ItemGroup>
+
+   (Lepší je přidat zdrojové projekty z repozitáře jako ProjectReference – tak to má RiftwarSagaServUO.)
+
+2. OrbServer.cs nahraď ve Scripts/Custom/OrbRemoteServer (původní verze používá .NET Remoting
+   a na .NET 10 se nesestaví). Ostatní skripty UO Architectu (BuildDesignRequest, ExtractItemsRequest, ...)
+   zůstávají, jen se znovu zahrnou do buildu.
+
+3. Po startu serveru musí být v konzoli:
+     UO Architect Server  is listening on port 2595
+   Port 2595/TCP musí být dostupný z počítače, kde běží UO Architect.
+
+Kompatibilita
+-------------
+- Klient i server musí být ze stejné řady (protokol verze 1). Starý UO Architect 2.6 (.NET Remoting)
+  se k novému serveru nepřipojí a naopak.
+- Heslo se po síti posílá nešifrovaně (stejně jako dřív) – port nevystavuj do internetu,
+  nebo ho tuneluj (VPN/SSH).

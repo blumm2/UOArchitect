@@ -8,7 +8,24 @@ Větev `net10`: projekty převedené z Visual Studia 2003 / .NET 1.1 na SDK-styl
 dotnet build UOArchitect.sln -c Release
 ```
 
-Výstup: `UO Architect/bin/Release/net10.0-windows/UO Architect.exe`. Při prvním buildu se do výstupu zkopíruje databáze návrhů z `UO Architect/Data/Save` (jen pokud tam ještě žádná není, rebuild tvoje návrhy nepřepíše).
+Výstup: `UO Architect/bin/Release/net10.0-windows/UO Architect.exe`. Výchozí databáze návrhů se dodává v `Data/Save`; aplikace ji při prvním startu zkopíruje do `Save/`, jen když tam ještě žádná není. Rozbalení nové verze přes starou tak uložené návrhy nepřepíše.
+
+### Release
+
+```
+powershell -ExecutionPolicy Bypass -File build-release.ps1
+```
+
+Do `artifacts/<verze>/` (mimo git) vytvoří balíčky pro GitHub Release a `SHA256SUMS.txt`:
+
+| Balíček | Obsah |
+|---|---|
+| `UOArchitect-<v>-win-x64.zip` | GUI, self-contained (není potřeba instalovat .NET) |
+| `UOArchitect-<v>-win-arm64.zip` | GUI, self-contained, Windows na ARM |
+| `UOArchitect-<v>-win-x64-framework-dependent.zip` | GUI, malý balíček, vyžaduje .NET 10 Desktop Runtime |
+| `UOArchitect-<v>-server-net10.zip` | `OrbServerSDK.dll` + `UOArchitectInterface.dll` (libovolný OS a CPU), `OrbServer.cs`, návod |
+
+Verze se bere z `Directory.Build.props`.
 
 | Projekt | Cíl | Běží na |
 |---|---|---|
@@ -20,6 +37,8 @@ Výstup: `UO Architect/bin/Release/net10.0-windows/UO Architect.exe`. Při prvn�
 Sestavit jde vše i na Linuxu/macOS (`EnableWindowsTargeting`), GUI ale běží jen na Windows. Serverová část (`OrbServerSDK`, `UOArchitectInterface`) je čistý .NET 10 a běží se serverem kdekoli.
 
 ## Co se změnilo proti 2.6.1
+
+- **ID předmětů nad 0x7FFF.** Starší verze ukládala ID jako znaménkový `short`, takže například 44147 (0xAC73) se exportovalo jako -21389. ID a barvy jsou teď 16bitové bez znaménka. Uložené návrhy i staré exporty se zápornými čísly se načtou se správným ID. Knihovna `Ultima` umí `tiledata.mul` ve formátu High Seas (0x10000 předmětů) a art až do 0xFFFF. Patch `multi.mul` ve formátu High Seas (16bajtové záznamy) se odmítne, aby se soubor nepoškodil.
 
 - **Spojení bez .NET Remoting.** Remoting v .NET 10 neexistuje. `OrbServerSDK` má vlastní TCP protokol (`OrbProtocol`, `OrbServerHost`, `OrbClient`) a serializaci (`OrbSerializer`) místo `BinaryFormatter`. API pro skripty (`OrbConnection`, `OrbRequest`, `OrbCommand`, `OrbClient`) zůstává.
   - Server místo `RemotingConfiguration.RegisterWellKnownServiceType(...)` volá `OrbServerHost.Start(port)` a obě strany registrují sdílené typy: `OrbSerializer.RegisterAssembly(typeof(UOArchitectInterface.DesignItem).Assembly)`.

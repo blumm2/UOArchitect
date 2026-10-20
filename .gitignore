@@ -12,3 +12,6 @@ obj/
 *.scc
 *.vspscc
 *.vssscc
+
+# Release packages (build-release.ps1)
+artifacts/

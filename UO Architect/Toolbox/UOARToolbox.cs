@@ -358,7 +358,7 @@ namespace UOArchitect
 			LegacyMenu.Attach(this, this.mainMenu1, true);
 			this.Name = "UOARToolBox";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "UO Architect 2.6";
+			this.Text = "UO Architect " + typeof(UOARToolBox).Assembly.GetName().Version.ToString(3);
 			this.TopMost = true;
 			this.tabControl1.ResumeLayout(false);
 			this.tabDesigns.ResumeLayout(false);
@@ -394,11 +394,30 @@ namespace UOArchitect
 		[STAThread]
 		public static void Main( string[] args )
 		{
+			// Internal\, Save\ and the config are read relative to the working directory
+			System.IO.Directory.SetCurrentDirectory( AppContext.BaseDirectory );
+			InstallSeedDesigns();
+
 			// design data types travel over the Orb connection
 			OrbServerSDK.OrbSerializer.RegisterAssembly( typeof( DesignItem ).Assembly );
 			OrbServerSDK.OrbClient.OnError += new OrbServerSDK.OrbErrorEvent( OnOrbError );
 
 			Application.Run( new UOARToolBox() );
+		}
+
+		// First start: copy the bundled design database to Save\. An existing Save\ is never
+		// touched, so unpacking a new version over an old one keeps the user's designs.
+		private static void InstallSeedDesigns()
+		{
+			string seedDir = System.IO.Path.Combine( "Data", "Save" );
+
+			if ( System.IO.File.Exists( System.IO.Path.Combine( "Save", "Designs.idx" ) ) || !System.IO.Directory.Exists( seedDir ) )
+				return;
+
+			System.IO.Directory.CreateDirectory( "Save" );
+
+			foreach ( string file in System.IO.Directory.GetFiles( seedDir ) )
+				System.IO.File.Copy( file, System.IO.Path.Combine( "Save", System.IO.Path.GetFileName( file ) ), true );
 		}
 
 		private static void OnOrbError( string message )

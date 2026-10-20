@@ -35,15 +35,9 @@
 
   <ItemGroup>
     <!-- runtime data next to the executable -->
-    <None Include="Internal/**" Exclude="Internal/**/*.scc" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="Internal/**" Exclude="Internal/**/*.scc" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <!-- seed design database; the app copies it to Save\ on first start (Save\ is never shipped) -->
+    <None Include="Data/Save/*" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
   </ItemGroup>
 
-  <!-- Seed design database: copied only when the output has none yet, so a rebuild
-       never overwrites the designs the user saved there. -->
-  <Target Name="CopySeedDesigns" AfterTargets="Build">
-    <ItemGroup>
-      <SeedDesign Include="Data/Save/*" />
-    </ItemGroup>
-    <Copy SourceFiles="@(SeedDesign)" DestinationFolder="$(OutDir)Save" Condition="!Exists('$(OutDir)Save/Designs.idx')" />
-  </Target>
 </Project>
