@@ -35,7 +35,7 @@ namespace UOArchitect
 			m_Z = z;
 
 			m_Height = TileData.ItemTable[index].CalcHeight;
-			m_Image = Art.GetStatic( index );
+			m_Image = Utility.GetStaticArt( index );
 
 			// apply hue to image
 			ApplyHue(0);
@@ -47,7 +47,7 @@ namespace UOArchitect
 		private void ApplyHue(int hue)
 		{
 			if(m_Image == null || hue != m_Hue)
-				m_Image = (Bitmap)Art.GetStatic(m_Index).Clone();
+				m_Image = (Bitmap)Utility.GetStaticArt(m_Index).Clone();
 
 			if(hue == m_Hue)
 				return;
@@ -66,7 +66,7 @@ namespace UOArchitect
 			m_Z = z;
 
 			m_Height = TileData.ItemTable[index].CalcHeight;
-			m_Image = Art.GetStatic( index );
+			m_Image = Utility.GetStaticArt( index );
 
 			m_BaseIndex = baseIndex;
 			m_Count = count;

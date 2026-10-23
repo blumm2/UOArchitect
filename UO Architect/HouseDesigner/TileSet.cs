@@ -54,7 +54,7 @@ namespace UOArchitect
 
 				m_ID = index;
 				m_Name = name;
-				m_Image = Art.GetStatic( index );
+				m_Image = Utility.GetStaticArt( index );
 			}
 			catch
 			{
@@ -85,7 +85,7 @@ namespace UOArchitect
 			m_ID = fname;
 		}
 
-		public TileSet( string name, int index ) : this( name, Art.GetStatic( index ), null )
+		public TileSet( string name, int index ) : this( name, Utility.GetStaticArt( index ), null )
 		{
 			m_ID = index;
 		}
@@ -187,7 +187,7 @@ namespace UOArchitect
 			}
 			else
 			{
-				m_Image = Art.GetStatic( m_BaseIndex );
+				m_Image = Utility.GetStaticArt( m_BaseIndex );
 			}
 
 			m_Tiles = new int[m_Count];
@@ -218,7 +218,7 @@ namespace UOArchitect
 			for ( int i = 0; i < count; ++i )
 				m_Tiles[i] = index + i;
 
-			m_Image = Art.GetStatic( m_Tiles[0] );
+			m_Image = Utility.GetStaticArt( m_Tiles[0] );
 		}
 
 		public TileSetEntry( int[] tiles )
@@ -228,7 +228,7 @@ namespace UOArchitect
 			if ( tiles.Length == 0 )
 				m_Image = new Bitmap( "Internal/Graphics/cursor_del.png" );
 			else
-				m_Image = Art.GetStatic( m_Tiles[0] );
+				m_Image = Utility.GetStaticArt( m_Tiles[0] );
 		}
 	}
 }

@@ -170,5 +170,48 @@ namespace UOArchitect
 			{
 			}
 		}
+
+		private static Bitmap m_MissingArt;
+
+		// Static art that never returns null: items whose art is missing in the
+		// client files get a placeholder instead of crashing the designer.
+		public static Bitmap GetStaticArt(int index)
+		{
+			Bitmap img = null;
+
+			try
+			{
+				img = Ultima.Art.GetStatic(index);
+			}
+			catch
+			{
+			}
+
+			return img != null ? img : MissingArt;
+		}
+
+		public static Bitmap MissingArt
+		{
+			get
+			{
+				if(m_MissingArt == null)
+				{
+					Bitmap img = new Bitmap(44, 44);
+
+					using(Graphics g = Graphics.FromImage(img))
+					using(Pen pen = new Pen(Color.Red, 2))
+					{
+						g.Clear(Color.FromArgb(64, 64, 64));
+						g.DrawRectangle(Pens.Gray, 0, 0, 43, 43);
+						g.DrawLine(pen, 8, 8, 35, 35);
+						g.DrawLine(pen, 35, 8, 8, 35);
+					}
+
+					m_MissingArt = img;
+				}
+
+				return m_MissingArt;
+			}
+		}
 	}
 }
